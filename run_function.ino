@@ -224,11 +224,9 @@ void RR(int i, int j) { //right
   else {
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR)) {
-        //FwSlow(20);// TrackSlowTime(50);
         Stop(100);
         TR90();
         TrackSlowTime(100);
-        // Stop(20);
         break;
       }
       TrackSlow();
@@ -839,11 +837,11 @@ void InCan(int i) {
   // Stop(50);
   sDown();
   
-  while (getdist(S_Can) >= SS_Can + 8) { // 5
+  while (S_Can >= SS_Can + 8) { // 5
     TrackSlow();
   }
   while (1) {
-    if (getdist(S_Can) < SS_Can)
+    if (S_Can < SS_Can)
     {
       Stop(50);
       if (i == 1) {
@@ -878,7 +876,7 @@ void InCan_checkCan(int i, int can,boolean tracked) { // checkCan
   
   sDown();
   
-  while (getdist(S_Can) >= SS_Can + 4)
+  while (S_Can >= SS_Can + 4)
   {
     TrackSlow(); delay(1);
 
@@ -901,7 +899,7 @@ void InCan_checkCan(int i, int can,boolean tracked) { // checkCan
   }
   while (flagCan == true)
   {
-    if (getdist(S_Can) < SS_Can)
+    if (S_Can < SS_Can)
     {
       Stop(50);
       if (i == 1)
@@ -1017,7 +1015,6 @@ void PlaceCan(String s) {
       i++;
       break;
     }
-
     TrackCan();
   }
 }

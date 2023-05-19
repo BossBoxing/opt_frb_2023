@@ -1,17 +1,140 @@
 ////////////////// PID //////////////////
 
+int error_value_front,error_value_back;
+
+void getErrorFront(){
+
+  // 1 0 0 0 0
+  if (S_LL < Ref_LL && 
+      S_L > Ref_L &&
+      S_C > Ref_C &&
+      S_R > Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = -4;
+  }
+  else if (S_LL < Ref_LL && 
+      S_L < Ref_L &&
+      S_C > Ref_C &&
+      S_R > Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = -3;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L < Ref_L &&
+      S_C > Ref_C &&
+      S_R > Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = -2;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L < Ref_L &&
+      S_C < Ref_C &&
+      S_R > Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = -1;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L > Ref_L &&
+      S_C < Ref_C &&
+      S_R > Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = 0;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L > Ref_L &&
+      S_C < Ref_C &&
+      S_R < Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = 1;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L > Ref_L &&
+      S_C > Ref_C &&
+      S_R < Ref_R &&
+      S_RR > Ref_RR )
+  {
+    error_value_front = 2;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L > Ref_L &&
+      S_C > Ref_C &&
+      S_R < Ref_R &&
+      S_RR < Ref_RR )
+  {
+    error_value_front = 3;
+  }
+  else if (S_LL > Ref_LL && 
+      S_L > Ref_L &&
+      S_C > Ref_C &&
+      S_R > Ref_R &&
+      S_RR < Ref_RR )
+  {
+    error_value_front = 4;
+  }
+
+  else if (S_LL < Ref_LL && 
+      S_L < Ref_L &&
+      S_C < Ref_C &&
+      S_R < Ref_R &&
+      S_RR < Ref_RR )
+  {
+    error_value_front = 0;
+  }
+}
+
+void getErrorBack(){
+  if (S_B_L < Ref_B_L &&
+      S_B_C > Ref_B_C &&
+      S_B_R > Ref_B_R )
+  {
+    error_value_back = -2;
+  }
+  else if (S_B_L < Ref_B_L &&
+      S_B_C < Ref_B_C &&
+      S_B_R > Ref_B_R )
+  {
+    error_value_back = -1;
+  }
+  else if (S_B_L > Ref_B_L &&
+      S_B_C < Ref_B_C &&
+      S_B_R > Ref_B_R )
+  {
+    error_value_back = 0;
+  }
+  else if (S_B_L > Ref_B_L &&
+      S_B_C < Ref_B_C &&
+      S_B_R < Ref_B_R )
+  {
+    error_value_back = 1;
+  }
+  else if (S_B_L > Ref_B_L &&
+      S_B_C > Ref_B_C &&
+      S_B_R < Ref_B_R )
+  {
+    error_value_back = 2;
+  }
+  else if (S_B_L < Ref_B_L &&
+      S_B_C < Ref_B_C &&
+      S_B_R < Ref_B_R )
+  {
+    error_value_back = 0;
+  }
+}
+
 void calculate_pid(int power) {
-  error = ( ((S_LL - diff_S_LL) + (S_L - diff_S_L)) - ((S_R - diff_S_R) + (S_RR - diff_S_RR)) );
+  getErrorFront();
+  error = error_value_front;
   P = error;
   I = I + previous_I;
   D = error - previous_error;
   
-  if (keepingCan == true){ // ค่า pid ตอนยกกระป๋อง
-    PID_value = (0.7 * P) + (0.5 * I) + (5 * D); // 0.25 0.5 0.42
-  }
-  else{ // ค่า pid ตอนไม่ได้หนีบหรือยกกระป๋อง
-    PID_value = (1.5 * P) + (0.5 * I) + (10 * D); // 0.25 0.5 0.42
-  }
+  PID_value = (20.0 * P) + (0.0 * I) + (20.0 * D);
   
   previous_I = I;
   previous_error = error;
@@ -20,37 +143,14 @@ void motor_control(int power) {
   int left_motor_speed = power + PID_value;
   int right_motor_speed = power - PID_value;
 
-  if (left_motor_speed > 255) {
-    left_motor_speed = 255;
-  }
-  if (right_motor_speed > 255) {
-    right_motor_speed = 255;
-  }
-  if (left_motor_speed < -255) {
-    left_motor_speed = -255;
-  }
-  if (right_motor_speed < -255) {
-    right_motor_speed = -255;
-  }
+  constrain(left_motor_speed,-255,255);
+  constrain(right_motor_speed,-255,255);
 
   motor_speed(1, left_motor_speed);
   motor_speed(2, right_motor_speed);
 }
 void Pid(int power) {
   calculate_pid(power);
-  motor_control(power);
-}
-
-void Pid_Circle(int power) {
-
-  error = ((((S_LL * 2) + S_L) ) - (S_R + (S_RR * 2)));
-  P = error;
-  I = I + previous_I;
-  D = error - previous_error;
-  PID_value = (0.7 * P) + (0.8 * I) + (1 * D); // 0.25 0.5 0.42
-  previous_I = I;
-  previous_error = error;
-
   motor_control(power);
 }
 void PidTime(int power, unsigned int Time) {
@@ -60,11 +160,14 @@ void PidTime(int power, unsigned int Time) {
   }
 }
 void calculate_pid_B(int power) {
-  error = ((S_B_LL + S_B_L) - (S_B_R + S_B_RR));
+  getErrorBack();
+  error = error_value_back;
   P = error;
   I = I + previous_I;
   D = error - previous_error;
-  PID_value = (0.4 * P) + (0.5 * I) + (2 * D); // 0.25 0.5 0.42
+  
+  PID_value = (20.0 * P) + (0.0 * I) + (20.0 * D);
+  
   previous_I = I;
   previous_error = error;
 }
@@ -72,18 +175,8 @@ void motor_control_B(int power) {
   int left_motor_speed = power - PID_value;
   int right_motor_speed = power + PID_value;
 
-  if (left_motor_speed > 255) {
-    left_motor_speed = 255;
-  }
-  if (right_motor_speed > 255) {
-    right_motor_speed = 255;
-  }
-  if (left_motor_speed < -255) {
-    left_motor_speed = -255;
-  }
-  if (right_motor_speed < -255) {
-    right_motor_speed = -255;
-  }
+  constrain(left_motor_speed,-255,255);
+  constrain(right_motor_speed,-255,255);
 
   motor_speed(1, -left_motor_speed);
   motor_speed(2, -right_motor_speed);
@@ -99,27 +192,24 @@ void PidTime_B(int power, unsigned int Time) {
   }
 }
 void Track() { // คำสั่งเดินตามเส้นไปข้างหน้า
-  Pid(180);
+  Pid(160);
 }
 void TrackSlow() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
-  Pid(150);
+  Pid(120);
 }
 void TrackCan() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
   Pid(70);
 }
 void Track_B() { // คำสั่งเดินตามเส้นไปข้างหน้า
-  Pid_B(180);
+  Pid_B(160);
 }
 void TrackSlow_B() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
-  Pid_B(150);
+  Pid_B(120);
 }
 void TrackSlower() { // คำสั่งเดินตามเส้นไปข้างหน้าเดินวงกลม
   Pid(70);
 }
-void TrackCircle() { // คำสั่งเดินตามเส้นไปข้างหน้าเดินวงกลม
 
-  Pid_Circle(70);
-}
 void TrackCircle_R() {
   if (S_R <= Ref_R) {
     motor(1, 60);
@@ -166,14 +256,6 @@ void TrackSlowTime(int Time) { // คำสั่งเดินตามเส�
   currentTime = millis();
   while (millis() - currentTime < Time) {
     TrackSlow();
-    delay(1);
-    //looptime++;
-  }
-}
-void TrackCircleTime(int Time) { // คำสั่งเดินตามเส้นไปข้างหน้าเดินวงกลมแบบกำหนดเวลา
-  currentTime = millis();
-  while (millis() - currentTime < Time) {
-    TrackCircle();
     delay(1);
     //looptime++;
   }

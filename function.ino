@@ -9,8 +9,8 @@ int Slow_R = 55;
 
 void Stop(int t) { // คำสั่งหยุด
   int time = t / 2;
-  motor(1, -70);
-  motor(2, -70);
+  motor(1, -100);
+  motor(2, -100);
   delay(time);
 
   motor(1, 0);
@@ -168,6 +168,15 @@ void setSensor() {
       i = 1;
     }
 
+    if (S_C > Max[3]) {
+      Max[3] = S_C;
+      i = 1;
+    }
+    if (S_C < Min[3]) {
+      Min[3] = S_C;
+      i = 1;
+    }
+
     if (S_R > Max[4]) {
       Max[4] = S_R;
       i = 1;
@@ -204,21 +213,21 @@ void setSensor() {
       i = 1;
     }
 
-    if (S_B_LL > Max_Back[1]) {
-      Max_Back[1] = S_B_LL;
+    if (S_B_L > Max_Back[1]) {
+      Max_Back[1] = S_B_L;
       i = 1;
     }
-    if (S_B_LL < Min_Back[1]) {
-      Min_Back[1] = S_B_LL;
+    if (S_B_L < Min_Back[1]) {
+      Min_Back[1] = S_B_L;
       i = 1;
     }
 
-    if (S_B_L > Max_Back[2]) {
-      Max_Back[2] = S_B_L;
+    if (S_B_C > Max_Back[2]) {
+      Max_Back[2] = S_B_C;
       i = 1;
     }
-    if (S_B_L < Min_Back[2]) {
-      Min_Back[2] = S_B_L;
+    if (S_B_C < Min_Back[2]) {
+      Min_Back[2] = S_B_C;
       i = 1;
     }
 
@@ -231,21 +240,12 @@ void setSensor() {
       i = 1;
     }
 
-    if (S_B_RR > Max_Back[4]) {
-      Max_Back[4] = S_B_RR;
+    if (S_B_RRR > Max_Back[4]) {
+      Max_Back[4] = S_B_RRR;
       i = 1;
     }
-    if (S_B_RR < Min_Back[4]) {
-      Min_Back[4] = S_B_RR;
-      i = 1;
-    }
-
-    if (S_B_RRR > Max_Back[5]) {
-      Max_Back[5] = S_B_RRR;
-      i = 1;
-    }
-    if (S_B_RRR < Min_Back[5]) {
-      Min_Back[5] = S_B_RRR;
+    if (S_B_RRR < Min_Back[4]) {
+      Min_Back[4] = S_B_RRR;
       i = 1;
     }
 
@@ -258,31 +258,30 @@ void setSensor() {
   EEPROM.update(startReffAddress + 1, (Max[0] + Min[0]) / 2); // LLL
   EEPROM.update(startReffAddress + 2, (Max[1] + Min[1]) / 2); // LL
   EEPROM.update(startReffAddress + 3, (Max[2] + Min[2]) / 2); // L
-  // EEPROM.update(startReffAddress + 13, (Max[3] + Min[3]) / 2); // C
-  EEPROM.update(startReffAddress + 4, (Max[4] + Min[4]) / 2); // R
-  EEPROM.update(startReffAddress + 5, (Max[5] + Min[5]) / 2); // RR
-  EEPROM.update(startReffAddress + 6, (Max[6] + Min[6]) / 2); // RRR
+  EEPROM.update(startReffAddress + 4, (Max[3] + Min[3]) / 2); // C
+  EEPROM.update(startReffAddress + 5, (Max[4] + Min[4]) / 2); // R
+  EEPROM.update(startReffAddress + 6, (Max[5] + Min[5]) / 2); // RR
+  EEPROM.update(startReffAddress + 7, (Max[6] + Min[6]) / 2); // RRR
 
   // Behind - side
-  EEPROM.update(startReffAddress + 7, (Max_Back[0] + Min_Back[0]) / 2); // B_LLL
-  EEPROM.update(startReffAddress + 8, (Max_Back[1] + Min_Back[1]) / 2); // B_LL
-  EEPROM.update(startReffAddress + 9, (Max_Back[2] + Min_Back[2]) / 2); // B_L
-  EEPROM.update(startReffAddress + 10, (Max_Back[3] + Min_Back[3]) / 2); // B_R
-  EEPROM.update(startReffAddress + 11, (Max_Back[4] + Min_Back[4]) / 2); // B_RR
-  EEPROM.update(startReffAddress + 12, (Max_Back[5] + Min_Back[5]) / 2); // B_RRR
+  EEPROM.update(startReffAddress + 8, (Max_Back[0] + Min_Back[0]) / 2); // B_LLL
+  EEPROM.update(startReffAddress + 9, (Max_Back[1] + Min_Back[1]) / 2); // B_L
+  EEPROM.update(startReffAddress + 10, (Max_Back[2] + Min_Back[2]) / 2); // B_C
+  EEPROM.update(startReffAddress + 11, (Max_Back[3] + Min_Back[3]) / 2); // B_R
+  EEPROM.update(startReffAddress + 12, (Max_Back[4] + Min_Back[4]) / 2); // B_RRR
 
   // for cal_error() - pid controller
   EEPROM.update(startReffAddress + 21, Max[1]); // LL
   EEPROM.update(startReffAddress + 22, Max[5]); // RR
 
   oledClear();
-  oled(0, 0,  "Sensor Ref|Sensor Ref");
-  oled(0, 7,  "---------------------");
-  oled(0, 13, "LLL   %d |RR      %d", EEPROM.read(startReffAddress + 1), EEPROM.read(startReffAddress + 5));
-  oled(0, 23, "LL    %d |RRR     %d", EEPROM.read(startReffAddress + 2), EEPROM.read(startReffAddress + 6));
-  oled(0, 33, "L     %d", EEPROM.read(startReffAddress + 3));
-  oled(0, 43, "C      %d", EEPROM.read(startReffAddress + 13));
-  oled(0, 53, "R      %d", EEPROM.read(startReffAddress + 4));
+//  oled(0, 0,  "Sensor Ref|Sensor Ref");
+//  oled(0, 7,  "---------------------");
+//  oled(0, 13, "LLL   %d |RR      %d", EEPROM.read(startReffAddress + 1), EEPROM.read(startReffAddress + 5));
+//  oled(0, 23, "LL    %d |RRR     %d", EEPROM.read(startReffAddress + 2), EEPROM.read(startReffAddress + 6));
+//  oled(0, 33, "L     %d", EEPROM.read(startReffAddress + 3));
+//  oled(0, 43, "C      %d", EEPROM.read(startReffAddress + 13));
+//  oled(0, 53, "R      %d", EEPROM.read(startReffAddress + 4));
   while (1) {}
 }
 void setServo() {
@@ -473,62 +472,6 @@ void setSensorHand() {
 
 
 }
-
-void code_setcan() { // คำสั่งวิ่งทั้งสนาม
-  Start();
-
-  if (Startcan == 1) {
-
-    if (can[1] == 1) {
-      Start_can1_R();
-    } else if (can[1] == 2) {
-      Start_can1_Y();
-    } else if (can[1] == 3) {
-      // green impossible cause user choose
-    }
-    //
-    if (can[2] == 1) {
-      can2_R();
-    } else if (can[2] == 2) {
-      can2_Y();
-    } else if (can[2] == 3) {
-      can2_G();
-    }
-  }
-  else {
-
-    if (can[2] == 1) {
-      // red impossible cause user choose
-    } else if (can[2] == 2) {
-      Start_can2_Y();
-    } else if (can[2] == 3) {
-      Start_can2_G();
-    }
-    //
-    if (can[1] == 1) {
-      can1_R();
-    } else if (can[1] == 2) {
-      can1_Y();
-    } else if (can[1] == 3) {
-      can1_G();
-    }
-  }
-  //
-
-  can3(can[3]); //
-  can4(can[4]); //
-  can5(can[5]); //
-  can6(can[6]); //
-  can7(can[7]); //
-  can8(can[8]); //
-  can9(can[9]); //
-  can10(can[10]); //
-  can11(can[11]); //
-  can12(can[12]); //
-  can13(can[13]); //
-  can14(can[14]); //
-  can15(can[15]); //
-}
 void code_checkcan() { // คำสั่งวิ่งทั้งสนาม
   Start();
 
@@ -665,9 +608,11 @@ void showAllSensor() {
       oled(0, 0,  "Sensor Val|Sensor Val");
       oled(0, 7,  "---------------------");
 
-      oled(20, 17, "%d ", S_LL); oled(40, 17, "%d ", S_L);
-
-      oled(70, 17, "%d ", S_R); oled(90, 17, "%d ", S_RR);
+      oled(20, 17, "%d ", S_LL); 
+      oled(40, 17, "%d ", S_L);
+      oled(60, 17, "%d ", S_C); 
+      oled(80, 17, "%d ", S_R); 
+      oled(100, 17, "%d ", S_RR);
 
       oled(0, 27, "%d ", S_LLL);
       oled(110, 27, "%d ", S_RRR);
@@ -675,15 +620,17 @@ void showAllSensor() {
       int x = 30;
       oled(0, 7 + x,  "---------------------");
 
-      oled(20, 27 + x, "%d ", S_B_RR); oled(40, 27 + x, "%d ", S_B_R);
-
-      oled(70, 27 + x, "%d ", S_B_L); oled(90, 27 + x, "%d ", S_B_LL);
+      // oled(20, 27 + x, "%d ", S_B_RR); 
+      oled(40, 27 + x, "%d ", S_B_R);
+      oled(60, 27 + x, "%d ", S_B_C);
+      oled(80, 27 + x, "%d ", S_B_L); 
+      // oled(90, 27 + x, "%d ", S_B_LL);
 
       oled(0, 17 + x, "%d ", S_B_RRR);
       oled(110, 17 + x, "%d ", S_B_LLL);
     }
     else {
-      oled(20, 17, "Distance: %d cm. ", getdist(S_Can));
+      oled(20, 17, "Distance: %d cm. ", S_Can);
       oled(20, 27, "Hand Red: %d ", S_CR);
       oled(20, 37, "Hand Green: %d ", S_CG);
       oled(20, 47, "CAN: %d", readCan());

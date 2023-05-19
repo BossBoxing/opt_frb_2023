@@ -50,7 +50,6 @@ void sDown() {
   for (int i = Raise_Up; i > Raise_Down; i -= 1)
   {
     servo(Raise, i);
-    delay(1);
     TrackCan();
   }
 }
@@ -58,7 +57,6 @@ void sUp_Back() {
   for (int i = Raise_Down; i < Raise_Up; i += 1)
   {
     servo(Raise, i);
-    delay(1);
     TrackSlow_B();
   }
 }
