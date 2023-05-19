@@ -134,7 +134,7 @@ void calculate_pid(int power) {
   I = I + previous_I;
   D = error - previous_error;
   
-  PID_value = (20.0 * P) + (0.0 * I) + (20.0 * D);
+  PID_value = (25.0 * P) + (0.0 * I) + (20.0 * D);
   
   previous_I = I;
   previous_error = error;
@@ -166,7 +166,7 @@ void calculate_pid_B(int power) {
   I = I + previous_I;
   D = error - previous_error;
   
-  PID_value = (20.0 * P) + (0.0 * I) + (20.0 * D);
+  PID_value = (30.0 * P) + (0.0 * I) + (35.0 * D);
   
   previous_I = I;
   previous_error = error;
@@ -192,19 +192,19 @@ void PidTime_B(int power, unsigned int Time) {
   }
 }
 void Track() { // คำสั่งเดินตามเส้นไปข้างหน้า
-  Pid(160);
+  Pid(180);
 }
 void TrackSlow() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
-  Pid(120);
+  Pid(150);
 }
 void TrackCan() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
   Pid(70);
 }
 void Track_B() { // คำสั่งเดินตามเส้นไปข้างหน้า
-  Pid_B(160);
+  Pid_B(180);
 }
 void TrackSlow_B() { // คำสั่งเดินตามเส้นไปข้างหน้าแบบช้า
-  Pid_B(120);
+  Pid_B(150);
 }
 void TrackSlower() { // คำสั่งเดินตามเส้นไปข้างหน้าเดินวงกลม
   Pid(70);

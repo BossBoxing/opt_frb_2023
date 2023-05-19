@@ -427,10 +427,11 @@ void LL_SM() { // คำสั่งเลี้ยวซ้าย สี่เ�
   }
   FwSlow(T_SM);// TrackSlowTime(50);
   Stop(10);
-  TL90();
+  TL90_SM();
   while (S_LLL <= Ref_LLL) {
     TrackSlow();
   }
+  TrackSlowTime(60);
 }
 void RR_SM() { // คำสั่งเลี้ยวขวา สี่เหลี่ยมเล็ก
   while (S_RR > Ref_RR || S_R > Ref_R) {
@@ -438,10 +439,11 @@ void RR_SM() { // คำสั่งเลี้ยวขวา สี่เห�
   }
   FwSlow(T_SM);// TrackSlowTime(50);
   Stop(10);
-  TR90();
+  TR90_SM();
   while (S_RRR <= Ref_RRR) {
     TrackSlow();
   }
+  TrackSlowTime(60);
 }
 void LL_SM(int Time) { // คำสั่งเลี้ยวซ้าย สี่เเหลี่ยมเล็ก กำหนดเวลาเดินหน้าก่อนเลี้ยว
   while (S_LL > Ref_LL || S_L > Ref_L) {
@@ -449,7 +451,7 @@ void LL_SM(int Time) { // คำสั่งเลี้ยวซ้าย ส�
   }
   FwSlow(T_SM);// TrackSlowTime(50);
   Stop(10);
-  TL90();
+  TL90_SM();
   while (S_LLL <= Ref_LLL) {
     TrackSlow();
   }
@@ -460,7 +462,7 @@ void RR_SM(int Time) { // คำสั่งเลี้ยวขวา สี�
   }
   FwSlow(T_SM);// TrackSlowTime(50);
   Stop(10);
-  TR90();
+  TR90_SM();
   while (S_RRR <= Ref_RRR) {
     TrackSlow();
   }
@@ -1019,7 +1021,7 @@ void PlaceCan(String s) {
   }
 }
 void Start() { // คำสั่ง ออกจากจุดสตาร์ท
-  motor(1, Slow_L); motor(2, Slow_R);
+  motor(1, 55); motor(2, 55);
   delay(300);
 }
 void Finish() {

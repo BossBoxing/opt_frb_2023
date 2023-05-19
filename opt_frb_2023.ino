@@ -52,7 +52,7 @@ int Ref_B_RRR = EEPROM.read(startReffAddress + 12); //ค่าแสงตเ�
 int Max_LL = EEPROM.read(startReffAddress + 21);
 int Max_RR = EEPROM.read(startReffAddress + 22);
 
-int SS_Can = 3; // 5 //ระยะเข้าหนีบกระป๋อง cm
+int SS_Can = 4; // 5 //ระยะเข้าหนีบกระป๋อง cm
 
 int diff_S_L = EEPROM.read(startDiffAddress + 1) == 255 ? 0 : EEPROM.read(startDiffAddress + 1);
 int diff_S_R = EEPROM.read(startDiffAddress + 2) == 255 ? 0 : EEPROM.read(startDiffAddress + 2);
@@ -68,8 +68,8 @@ int Raise_Down = EEPROM.read(startServoSetAddress + 5) == 255 ? 19 : EEPROM.read
 /////////////////////////////////
 // Time Config //
 int T1 = 50;
-int T2 = 110;
-int T3 = 150;
+int T2 = 120;
+int T3 = 160;
 int T_SM = 50;
 int T_CC = 50;
 /////////////////////////////////
@@ -177,7 +177,58 @@ void loop() {
     Pid(150); 
   }
   else if (function == 9) {
+
+    while(S_LLL > Ref_LLL || S_RRR > Ref_RRR)
+    {
+      Pid(120);
+    }
+    Stop(100);
+    while (S_L <= Ref_L)
+    {
+      motor(1,-50);
+      motor(2,50);
+      delay(40);
+    }
+    while (S_L >= Ref_L)
+    {
+      motor(1,-50);
+      motor(2,50);
+      delay(10);
+    }
+    while (S_L <= Ref_L)
+    {
+      motor(1,-50);
+      motor(2,50);
+      delay(10);
+    }
+
+    unsigned long currentTime=millis();
+    while(millis()-currentTime < 1000)
+    {
+      if( S_L >= Ref_L )
+      {
+        motor(1,50);
+        motor(2,-50);
+        // delay(10);
+      }
+      else if( S_R >= Ref_R )
+      {
+        motor(1,-50);
+        motor(2,50);
+        // delay(10);
+      }
+    }
+
+//    currentTime=millis();
+//    while(millis()-currentTime < 200)
+//    {
+//      Pid(120);
+//    }
     
+    Pause(100);
+    beep();
+    
+    Wait();
   }
   else {
     setCanPos();

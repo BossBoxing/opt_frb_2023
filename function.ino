@@ -4,8 +4,8 @@ long currentTime = 0;
 int g, y, r = 0;
 int i = 0;
 
-int Slow_L = 55; // power ในการเลี้ยว
-int Slow_R = 55;
+int Slow_L = 85; // power ในการเลี้ยว
+int Slow_R = 85;
 
 void Stop(int t) { // คำสั่งหยุด
   int time = t / 2;
