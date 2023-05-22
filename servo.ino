@@ -43,18 +43,35 @@ void sKeep() {
 void sKind() {
   servo(Clasp, Clasp_Place);  delay(350);
 }
+void sSet() {
+  servo(Clasp, Clasp_Set);  // delay(350);
+}
 void sUp() {
-  servo(Raise, Raise_Up);  delay(250);
+  servo(Raise, Raise_Up);  // delay(250);
 }
 void sDown() {
+  for (int i = Raise_Up; i > Raise_Down; i -= 2)
+  {
+    servo(Raise, i);
+    
+    if (S_LL > Ref_LL || S_RR > Ref_RR)
+    {
+     TrackCan(); 
+    }
+    else{
+      Pause(10);
+    }
+  }
+}
+void sDown_Yellow() {
   for (int i = Raise_Up; i > Raise_Down; i -= 1)
   {
     servo(Raise, i);
-    TrackCan();
+    delay(5);
   }
 }
 void sUp_Back() {
-  for (int i = Raise_Down; i < Raise_Up; i += 1)
+  for (int i = Raise_Down; i < Raise_Up; i += 2)
   {
     servo(Raise, i);
     TrackSlow_B();

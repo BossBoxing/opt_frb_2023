@@ -67,7 +67,7 @@ void LL(int i, int j) { //left
           TL90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -80,19 +80,19 @@ void LL(int i, int j) { //left
         Fw(T2);
         Stop(100);
         if (j == 1) {
-          TL90();
+          TL90_Pre();
         }
         else if (j == 2) {
-          TL90();
+          TL90_Pre();
           TL90();
         }
         else {
-          TL90();
+          TL90_Pre();
           TL90();
           TL90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -117,7 +117,7 @@ void LL(int i, int j) { //left
           TL90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -163,7 +163,7 @@ void RR(int i, int j) { //right
           TR90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -176,19 +176,19 @@ void RR(int i, int j) { //right
         Fw(T2);
         Stop(100);
         if (j == 1) {
-          TR90();
+          TR90_Pre();
         }
         else if (j == 2) {
-          TR90();
+          TR90_Pre();
           TR90();
         }
         else {
-          TR90();
+          TR90_Pre();
           TR90();
           TR90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -215,7 +215,7 @@ void RR(int i, int j) { //right
           TR90();
         }
         //Stop(20);
-        TrackTwoSensorTime(200);
+        TrackSlowTime(200);
         break;
       }
       Track();
@@ -242,8 +242,8 @@ void B_LL(int i, int j) { //left
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T1);
-        Pause(20);
+        BkSlow(T1);
+        B_Stop(30);
         if (j == 1) {
           TL90();
         }
@@ -267,8 +267,8 @@ void B_LL(int i, int j) { //left
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T2);
-        Pause(20);
+        BkSlow(T2);
+        B_Stop(30);
         if (j == 1) {
           TL90();
         }
@@ -292,8 +292,8 @@ void B_LL(int i, int j) { //left
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T3);
-        Pause(20);
+        BkSlow(T3);
+        B_Stop(30);
         if (j == 1) {
           TL90();
         }
@@ -335,8 +335,8 @@ void B_RR(int i, int j) { //right
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T1);
-        Pause(20);
+        BkSlow(T1);
+        B_Stop(30);
         if (j == 1) {
           TR90_Pre();
         }
@@ -360,8 +360,8 @@ void B_RR(int i, int j) { //right
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T2);
-        Pause(20);
+        BkSlow(T2);
+        B_Stop(30);
         if (j == 1) {
           TR90();
         }
@@ -385,8 +385,8 @@ void B_RR(int i, int j) { //right
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR))
       {
-        Bk(T3);
-        Pause(20);
+        BkSlow(T3);
+        B_Stop(30);
         if (j == 1) {
           TR90();
         }
@@ -497,32 +497,14 @@ void LL_SM_Caribate() { // เลี้ยวซ้าย สี่เหลี�
   while (S_RRR <= Ref_RRR) {
     TrackSlow();
   }
-  TrackSlowTime(200);
-  // while (S_RRR <= Ref_RRR) {
-  //   TrackSlow();
-  // }
-  // while (S_RRR >= Ref_RRR) {
-  //   TrackSlow();
-  // }
-  // while (S_RRR <= Ref_RRR) {
-  //   TrackSlow();
-  // }
+  TrackSlowTime(100);
 }
 void RR_SM_Caribate() { // เลี้ยวขวา สี่เหลี่ยมเล็ก และมีการ Caribate ตอนสุดท้าย
   RR_SM();
   while (S_LLL <= Ref_LLL) {
     TrackSlow();
   }
-  TrackSlowTime(200);
-  // while (S_LLL <= Ref_LLL) {
-  //   TrackSlow();
-  // }
-  // while (S_LLL >= Ref_LLL) {
-  //   TrackSlow();
-  // }
-  // while (S_LLL <= Ref_LLL) {
-  //   TrackSlow();
-  // }
+  TrackSlowTime(100);
 }
 void SM(int i) { //square small
   while (S_LL > Ref_LL || S_RR > Ref_RR) {
@@ -544,6 +526,29 @@ void SM(int i) { //square small
     RR_SM();
     LL_SM();
     RR_SM_Caribate();
+  }
+}
+
+void SM_Pure(int i) { //square small
+  while (S_LL > Ref_LL || S_RR > Ref_RR) {
+    TrackSlow();
+  }
+  if (i == 1) {
+    LL_SM();
+    RR_SM();
+    LL_SM();
+  }
+  else if (i == 2) {
+    RR_SM();
+    LL_SM();
+    FF_SM(2);
+    LL_SM();
+    RR_SM();
+  }
+  else {
+    RR_SM();
+    LL_SM();
+    RR_SM();
   }
 }
 
@@ -838,7 +843,7 @@ void InCan(int i) {
     }*/
   // Stop(50);
   sDown();
-  
+
   while (S_Can >= SS_Can + 8) { // 5
     TrackSlow();
   }
@@ -872,45 +877,48 @@ void InCan(int i) {
     Pid(70);
   }
 }
-void InCan_checkCan(int i, int can,boolean tracked) { // checkCan
+void InCan_checkCan(int i, int can, boolean tracked) { // checkCan
   int time = 0;
   boolean flagCan = true;
-  
+
   sDown();
-  
-  while (S_Can >= SS_Can + 4)
-  {
-    TrackSlow(); delay(1);
 
-    if (S_LL > Ref_LL && S_L > Ref_L && S_R > Ref_R && S_RR > Ref_RR)
-    {
-      // time++;
-    }
-    else
-    {
-      time = 0;
-    }
-
-    if (time > 35) // 15
-    { // no can
-      noCan(can);
-      can_check[can] = 1;
-      flagCan = false;
-      break;
-    }
-  }
+//  while (S_Can >= SS_Can + 4)
+//  {
+//    TrackSlow(); delay(1);
+//
+//    if (S_LL > Ref_LL && S_L > Ref_L && S_R > Ref_R && S_RR > Ref_RR)
+//    {
+//      // time++;
+//    }
+//    else
+//    {
+//      time = 0;
+//    }
+//
+//    if (time > 35) // 15
+//    { // no can
+//      noCan(can);
+//      can_check[can] = 1;
+//      flagCan = false;
+//      break;
+//    }
+//  }
   while (flagCan == true)
   {
-    if (S_Can < SS_Can)
+    int POWER = constrain(map(S_Can, 0, 16, 10, 180),0,180);
+    Pid(POWER);
+    
+    if (S_Can <= SS_Can)
     {
-      Stop(50);
+      Pause(50);
       if (i == 1)
       {
-        Stop(20);
-        if (tracked){
+        Pause(20);
+        if (tracked) {
           Keep_Track();
         }
-        else{
+        else {
           Keep();
         }
         Stop(20);
@@ -919,11 +927,11 @@ void InCan_checkCan(int i, int can,boolean tracked) { // checkCan
       }
       else if (i == 2)
       {
-        Stop(20);
-        if (tracked){
+        Pause(20);
+        if (tracked) {
           Keep_Track();
         }
-        else{
+        else {
           Keep();
         }
         Stop(20);
@@ -932,92 +940,266 @@ void InCan_checkCan(int i, int can,boolean tracked) { // checkCan
       }
       else
       {
-        Stop(20);
-        if (tracked){
+        Pause(20);
+        if (tracked) {
           Keep_Track();
         }
-        else{
+        else {
           Keep();
         }
         Stop(20);
       }
       break;
     }
-    Pid(70);
   }
 }
 
-void PlaceCan(String s) {
-  if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR)) {
-    TrackSlowTime(30);
+void PlaceYellow() {
+  Pause(30);
+
+  if (y_count == 0 || y_count == 3 || y_count == 7)
+  {
+    Place();
+    
+    motor(1,0); motor(2,40);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,0); motor(2,-40);
+    delay(100);
+    Pause(30);
+  }
+  else if (y_count == 1 || y_count == 4 || y_count ==8)
+  {
+    Place();
+    
+    motor(1,40); motor(2,0);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,0);
+    delay(100);
+    Pause(30);
+  }
+  else
+  {
+    Place();
+    
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
   }
   
-  sDown();
+  while (S_B_LLL >= Ref_B_LLL) {
+    BkSlow(10); // motor(1, -80);  motor(2, -80); delay(150);
+  }
+  Pause(30);
+
+  TL90();
+  Pause(10);
+  sUp();
+  sSet();
+
+  y_count++;
+}
+
+void PlaceRed() {
+  Pause(30);
+
+  if (r_count == 0 || r_count == 3 || r_count == 7)
+  {
+    Place();
+    
+    motor(1,0); motor(2,40);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,0); motor(2,-40);
+    delay(100);
+    Pause(30);
+  }
+  else if (r_count == 1 || r_count == 4 || r_count ==8)
+  {
+    Place();
+    
+    motor(1,40); motor(2,0);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,0);
+    delay(100);
+    Pause(30);
+  }
+  else
+  {
+    Place();
+    
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+  }
+  Pause(30);
+  // sUp();
+  // sSet();
+
+  r_count++;
+}
+
+void PlaceGreen() {
+  Pause(30);
+
+  if (g_count == 0 || g_count == 3 || g_count == 7)
+  {
+    Place();
+    
+    motor(1,0); motor(2,40);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,0); motor(2,-40);
+    delay(100);
+    Pause(30);
+  }
+  else if (g_count == 1 || g_count == 4 || g_count ==8)
+  {
+    Place();
+    
+    motor(1,40); motor(2,0);
+    delay(100);
+    Pause(30);
+
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,0);
+    delay(100);
+    Pause(30);
+  }
+  else
+  {
+    Place();
+    
+    motor(1,40); motor(2,40);
+    delay(60);
+    Pause(30);
+    
+    motor(1,-40); motor(2,-40);
+    delay(60);
+    Pause(30);
+  }
   
+  Pause(30);
+  // sUp();
+  // sSet();
+
+  g_count++;
+}
+
+
+void PlaceCan(String s) {
+  //  if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR)) {
+  //    TrackSlowTime(30);
+  //  }
+  Pause(10);
+
+  if (s == "Y" || s == "Y_Finish") {
+    sDown_Yellow();
+  }
+  else {
+    sDown();
+  }
+
   while (1) {
-    if ((S_LL < Ref_LL) && (S_RR < Ref_RR) && (s != "Y") && (s != "Y2") && (s != "Y_Finish"))
+
+    if (s == "Y" || s == "Y_Finish") {
+      TrackCanYellow();
+    }
+    else {
+      TrackCan();
+    }
+
+    if ((S_LL < Ref_LL) && (S_RR < Ref_RR) && (s != "Y") && (s != "Y_Finish"))
     {
       Stop(100);
-      Pause(30);
-      Place();
 
+      if (s == "R")
+      {
+        PlaceRed();
+      }
+      else
+      {
+        PlaceGreen();
+      }
+
+      sSet();
       sUp_Back();
       break;
     }
-    else if ((S_L < Ref_L) && (S_LL < Ref_LL) && (s == "Y")) {
-      Pause(100);
-      Place();
-
-      servo(Clasp, Clasp_Set);  delay(300);
-      while (S_B_RRR >= Ref_B_RRR) {
-        BkSlow(10); // motor(1, -80);  motor(2, -80); delay(150);
-      }
-      BkSlow(30);
-      Pause(100);
-      
-      TL90(); 
-      
-      Pause(100);
-      break;
-    }
-    else if ((S_RR < Ref_RR) && (S_R < Ref_R) && (s == "Y2")) {
-      Pause(100);
-      Place();
-
-      servo(Clasp, Clasp_Set);  delay(300);
-      while (S_B_RRR >= Ref_B_RRR) {
-        BkSlow(10);
-      }
-      
-      BkSlow(30);
-      Pause(100);
-      TL90();
-      Pause(100);
-      
+    else if ((S_LL < Ref_LL) && (S_RR < Ref_RR) && (s == "Y")) {
+      PlaceYellow();
       break;
     }
     else if ((S_LL < Ref_LL) && (S_L < Ref_L) && (s == "Y_Finish")) {
-      Stop(100);
-
-      Place();
-
-      servo(Clasp, Clasp_Set);  delay(300);
-      motor(1, -80);  motor(2, -80); delay(150);
-      Pause(100);
-      motor(1, Slow_L);  motor(2, -Slow_R); delay(60);
-      Pause(100);
-
-      while (S_LLL >= Ref_LLL) {
-        motor(1, -80);  motor(2, -80); delay(10);
-      }
+      PlaceYellow();
+      
       motor(1, -Slow_L);  motor(2, -Slow_R); delay(200);
-
       Pause(20);
 
-      i++;
       break;
     }
-    TrackCan();
   }
 }
 void Start() { // คำสั่ง ออกจากจุดสตาร์ท

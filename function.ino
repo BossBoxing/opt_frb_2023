@@ -1,8 +1,7 @@
 float error = 0, P = 0, I = 0, D = 0, PID_value = 0;
 float previous_error = 0, previous_I = 0;
 long currentTime = 0;
-int g, y, r = 0;
-int i = 0;
+int g_count, y_count, r_count = 0;
 
 int Slow_L = 85; // power ในการเลี้ยว
 int Slow_R = 85;
@@ -19,8 +18,8 @@ void Stop(int t) { // คำสั่งหยุด
 }
 void B_Stop(int t) { // คำสั่งหยุด
   int time = t / 2;
-  motor(1, 70);
-  motor(2, 70);
+  motor(1, 100);
+  motor(2, 100);
   delay(time);
 
   motor(1, 0);
@@ -45,7 +44,7 @@ void Bk(int t) { // คำสั่งถอยหลัง
   delay(t);
 }
 void BkSlow(int t) { // คำสั่งถอยหลังแบบช้า
-  motor(1, -90); motor(2, -90);
+  motor(1, -60); motor(2, -60);
   delay(t);
 }
 
@@ -79,7 +78,7 @@ void ok() {
   XIO();
   
   sUp();
-  sKind();
+  sSet();
   // servo(Clasp, Clasp_Set); delay(200);
   // servo(Raise, Raise_Up); delay(200);
 
@@ -387,6 +386,7 @@ void setSensorHand() {
   delay(500);
   ////
   EEPROM.update(startColorAddress + 1, S_CG);
+  EEPROM.update(startColorAddress + 4, S_CR);
   ////
   setTextSize(2);
   delay(500);
@@ -415,8 +415,8 @@ void setSensorHand() {
   beep();
   delay(500);
   ////
-  EEPROM.update(startColorAddress + 2 , S_CG);
-  EEPROM.update(startColorAddress + 4, S_CR);
+  EEPROM.update(startColorAddress + 3, S_CG);
+  EEPROM.update(startColorAddress + 6, S_CR);
   ////
   setTextSize(2);
   delay(500);
@@ -445,7 +445,8 @@ void setSensorHand() {
   beep();
   delay(500);
   ////
-  EEPROM.update(startColorAddress + 3, S_CR);
+  EEPROM.update(startColorAddress + 2, S_CG);
+  EEPROM.update(startColorAddress + 5, S_CR);
   ////
   setTextSize(2);
   delay(500);
@@ -513,13 +514,13 @@ void code_checkcan_R() { // คำสั่งวิ่งทั้งสนา�
 int readCan() { // คำสั่งอ่านค่ากระป๋องด้วยเซนเซอร์มือ ออกมาเป็นตัวเลข 1 แดง 2 เหลือง 3 เขียว
 
   // Read Can
-  // Green G:38 R:18
-  // Red G:21 R:28
-  // Yellow G:46 R:40
-  if (S_CG < ((Ref_CG_R + Ref_CG_Y) / 2) ) {
+  
+  if ( ((S_CG > (Ref_CG_R - diff_can)) && (S_CG < (Ref_CG_R + diff_can))) 
+      && ((S_CR > (Ref_CR_R - diff_can)) && (S_CR < (Ref_CR_R + diff_can))) ) {
     return CanPosition[1]; // RED CAN
   }
-  else if (S_CR < ( (Ref_CR_G + Ref_CR_Y) / 2 ) ) {
+  else if ( ((S_CG > (Ref_CG_G - diff_can)) && (S_CG < (Ref_CG_G + diff_can))) 
+      && ((S_CR > (Ref_CR_G - diff_can)) && (S_CR < (Ref_CR_G + diff_can))) ) {
     return CanPosition[3]; // GREEN CAN
   }
   else {
