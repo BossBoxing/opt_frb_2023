@@ -71,7 +71,7 @@ int Raise_Up = EEPROM.read(startServoSetAddress + 4) == 255 ? 38 : EEPROM.read(s
 int Raise_Down = EEPROM.read(startServoSetAddress + 5) == 255 ? 19 : EEPROM.read(startServoSetAddress + 5) ; //ค่าเอามือลง
 /////////////////////////////////
 // Time Config //
-int T1 = 50;
+int T1 = 25;
 int T2 = 120;
 int T3 = 160;
 int T_SM = 50;
@@ -114,25 +114,10 @@ void loop() {
   if (function == 0) {
     // setCanPos();
 
-
-    while (S_LLL >= Ref_LLL)
-    {
-     Pid(150); 
-    }
-    while (S_LLL <= Ref_LLL)
-    {
-     Pid(150); 
-    }
-    while (S_LLL >= Ref_LLL)
-    {
-     Pid(150); 
-    }
-    Wait();
+    code_checkcan(); // โค้ดวิ่ง
     
-    // code_checkcan(); // โค้ดวิ่ง
-    
-//    Pause(1000000); // วิ่งเสร็จ ให้หยุดหุ่นยนต์
-//    Wait(); // รอกดสวิตส์
+    Pause(1000000); // วิ่งเสร็จ ให้หยุดหุ่นยนต์
+    Wait(); // รอกดสวิตส์
   }
   else if (function == 1) {
     setSensor(); // เซ้ทค่าแสง

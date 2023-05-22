@@ -50,9 +50,10 @@ void LL(int i, int j) { //left
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-        while (S_RR < Ref_RR) {
-          Pid_twoSensor(200);
-        }
+        Fw(T1);
+//        while (S_RR < Ref_RR) {
+//          Pid_twoSensor(200);
+//        }
         Stop(100);
         if (j == 1) {
           TL90();
@@ -145,10 +146,10 @@ void RR(int i, int j) { //right
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-        //        Fw(T1);
-        while (S_RR < Ref_RR) {
-          Pid_twoSensor(200);
-        }
+        Fw(T1);
+//        while (S_RR < Ref_RR) {
+//          Pid_twoSensor(200);
+//        }
         Stop(100);
         if (j == 1) {
           TR90();
@@ -566,123 +567,109 @@ void CC(int x, int y) { //circle
   }
   ///////////////1////////////////
   if ((x == 1) && (y == 4)) { //1 > 4
-    LL(4, 1);
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
+    LL(4,1);
+
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
+    }
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
+    }
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(120); 
     }
 
-    while (S_LL <= Ref_LL) {
-      Fw(10);
-    }
-    TrackCircle_L_Time(100);
-    // while(S_R >= Ref_R || S_RR >= Ref_RR){TrackCircle_R();}
-
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_L();
-    }
-
-    FwSlow(T_CC);
-    Stop(50);
     TL90_Pre();
-
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
+    PidCircle_L_Time(180, 100);
+    
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_L();
+    while (S_LL >= Ref_LL || S_L >= Ref_L)
+    {
+     Pid_Circle_L(150); 
     }
-
-    Stop(30);
-    TL90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_LLL <= Ref_LLL) {
-      TrackSlow();
-    }
-    TrackSlowTime(100);
+    // Stop(50);
+    FwSlow(T_CC);
+    TL90_Pre();
   }
   else if ((x == 1) && (y == 5)) { //1 > 5
-    RR(4, 1);
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
+    RR(4,1);
+
+    while (S_RRR >= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
+    }
+    while (S_RRR <= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
+    }
+    while (S_RRR >= Ref_RRR)
+    {
+     Pid_Circle_R(120); 
     }
 
-    while (S_RR <= Ref_RR) {
-      Fw(10);
-    }
-    TrackCircle_R_Time(100);
-    // while(S_R >= Ref_R || S_RR >= Ref_RR){TrackCircle_R();}
-
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
-    }
-
-    FwSlow(T_CC);
-    Stop(50);
     TR90_Pre();
-    Stop(50);
-
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
+    PidCircle_R_Time(180, 100);
+    
+    while (S_RRR <= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
     }
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
+    while (S_RR >= Ref_RR || S_R >= Ref_R)
+    {
+     Pid_Circle_R(150); 
     }
-
-    Stop(30);
-    TR90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_RRR <= Ref_RRR) {
-      TrackSlow();
-    }
-    TrackSlowTime(100);
+    // Stop(50);
+    FwSlow(T_CC);
+    TR90_Pre();
   }
   else if ((x == 1) && (y == 6)) { //1 > 6
-    RR(4, 1);
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
+    LL(4,1);
+
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
+    }
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
+    }
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(120); 
     }
 
-    while (S_RR <= Ref_RR) {
-      Fw(10);
+    TL90_Pre();
+    PidCircle_L_Time(180, 100);
+    
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-    TrackCircle_R_Time(100);
-    // while(S_R >= Ref_R || S_RR >= Ref_RR){TrackCircle_R();}
-
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
+    }
+    while (S_LL >= Ref_LL || S_L >= Ref_L)
+    {
+     Pid_Circle_L(150); 
+    }
+    // Stop(50);
     FwSlow(T_CC);
-    Stop(50);
-    TR90_Pre();
-    Stop(50);
+    TL90_Pre();
 
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
-    }
-
-    while (S_RR <= Ref_RR) {
-      FwSlow(10);
-    }
-    TrackCircle_R_Time(100);
-
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
-    }
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
-    }
-
-    Stop(30);
-    TR90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_RRR <= Ref_RRR) {
+    while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
       TrackSlow();
     }
-    TrackSlowTime(60);
   }
   ///////////////2/////////////////
   else if ((x == 2) && (y == 3)) { //2 > 3
@@ -695,7 +682,7 @@ void CC(int x, int y) { //circle
     while (S_LL <= Ref_LL) {
       Fw(10);
     }
-    TrackCircle_L_Time(200);
+    // TrackCircle_L_Time(180, 200);
     while (S_L >= Ref_L || S_LL >= Ref_LL) {
       TrackCircle_L();
     }
@@ -721,43 +708,43 @@ void CC(int x, int y) { //circle
   }
   else if ((x == 2) && (y == 6)) { //2 > 6
     // go to placecan [10]
-    LL(4, 1);
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
+    LL(4,1);
+
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_L();
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(120); 
     }
 
-    FwSlow(T_CC);
-    Stop(50);
     TL90_Pre();
-    Stop(50);
-
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
+    PidCircle_L_Time(180,100);
+    
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-
-    while (S_LL <= Ref_LL) {
-      Fw(10);
+    while (S_LLL >= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-    TrackCircle_L_Time(100);
-
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
+    while (S_LLL <= Ref_LLL)
+    {
+     Pid_Circle_L(180); 
     }
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_L();
+    while (S_LL >= Ref_LL || S_L >= Ref_L)
+    {
+     Pid_Circle_L(150); 
     }
+    // Stop(50);
+    FwSlow(T_CC);
+    TL90_Pre();
 
-    Stop(30);
-    TL90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_LLL <= Ref_LLL) {
+    while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
       TrackSlow();
     }
-    TrackSlowTime(60);
   }
   ////////////////3///////////////
   else if ((x == 3) && (y == 4)) { //3 > 4
@@ -780,7 +767,7 @@ void CC(int x, int y) { //circle
       Fw(10);
     }
 
-    TrackCircle_L_Time(200);
+    // TrackCircle_L_Time(180, 200);
     while (S_L >= Ref_L || S_LL >= Ref_LL) {
       TrackCircle_L();
     }
@@ -801,40 +788,43 @@ void CC(int x, int y) { //circle
     // No Use
   }
   else { //3 > 6
-    RR(4, 1);
+    RR(4,1);
 
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
+    while (S_RRR <= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
     }
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
+    while (S_RRR >= Ref_RRR)
+    {
+     Pid_Circle_R(120); 
     }
 
-    FwSlow(T_CC);
-    Stop(50);
     TR90_Pre();
-    Stop(50);
-
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
+    PidCircle_R_Time(180, 100);
+    
+    while (S_RRR <= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
     }
-    while (S_RR <= Ref_RR) {
-      Fw(10);
+    while (S_RRR >= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
     }
-    TrackCircle_R_Time(100);
-
-    while (S_RRR >= Ref_RRR) {
-      TrackCircle_R();
+    while (S_RRR <= Ref_RRR)
+    {
+     Pid_Circle_R(180); 
     }
+    while (S_RR >= Ref_RR || S_R >= Ref_R)
+    {
+     Pid_Circle_R(150); 
+    }
+    // Stop(50);
+    FwSlow(T_CC);
+    TR90_Pre();
 
-    Stop(30);
-    TR90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_RRR <= Ref_RRR) {
+    while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
       TrackSlow();
     }
-    TrackSlowTime(60);
   }
 }
 void InCan(int i) {
