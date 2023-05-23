@@ -343,11 +343,11 @@ void can11() {
     LL(1, 2);
   }
 
-  InCan_checkCan(1, 11,false);
+  InCan_checkCan(3, 11,false);
 
   if (can_check[11] == 0)
   {
-    RR(3, 2);
+    B_LL(3, 2);
     CC(1, 6);
     FF(1); // FF(1);
     FF(4);
@@ -364,11 +364,11 @@ void can12() {
     RR(1, 2); // Wait();
   }
 
-  InCan_checkCan(2, 12,false);
+  InCan_checkCan(3, 12,false);
 
   if (can_check[12] == 0)
   {
-    LL(3, 2);
+    B_RR(3, 2);
     CC(1, 6);
     FF(1); // FF(1);
     FF(4);
