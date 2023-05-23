@@ -6,6 +6,9 @@ int g_count, y_count, r_count = 0;
 int Slow_L = 85; // power ในการเลี้ยว
 int Slow_R = 85;
 
+int Slow_L_Finish = 60; // power ในการถอยหลังเข้า Finish
+int Slow_R_Finish = 60;
+
 void Stop(int t) { // คำสั่งหยุด
   int time = t / 2;
   motor(1, -100);

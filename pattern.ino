@@ -519,7 +519,7 @@ void no_can15_to_finish() {
   CC(1, 6);
   FF(1); // FF(1);
   FF(4);
-  Finish();
+  Finish("R");
 }
 
 void GoTarget(int target) {
@@ -582,8 +582,6 @@ void gg() { // วิ่งไปวางสีเขียว
 }
 
 void yy_finish() { // วิ่งไปวางสีเหลือง กระป๋องสุดท้าย
-  // SM(2); //
-
   while (S_LL > Ref_LL || S_RR > Ref_RR) {
     TrackSlow();
   }
@@ -591,7 +589,7 @@ void yy_finish() { // วิ่งไปวางสีเหลือง กร
   LL_SM();
   FF_SM(2);
   LL_SM();
-  RR_SM_Caribate();
+  RR_SM();
 
   /////////
   PlaceCan("Y_Finish");
@@ -602,12 +600,12 @@ void rr_finish() { // วิ่งไปวางสีเแดง กระป
   LL(4, 1);
   PlaceCan("R");
   B_LL(4, 1);
-  Finish();
+  Finish("R");
 }
 void gg_finish() { // วิ่งไปวางสีเเขียว กระป๋องสุดท้าย
   SM(1);
   RR(4, 1);
   PlaceCan("G");
   B_RR(4, 1);
-  Finish();
+  Finish("G");
 }

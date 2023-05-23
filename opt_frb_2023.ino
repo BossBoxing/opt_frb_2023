@@ -113,7 +113,7 @@ void setup() {
 void loop() {
   if (function == 0) {
     // setCanPos();
-
+    
     code_checkcan(); // โค้ดวิ่ง
     
     Pause(1000000); // วิ่งเสร็จ ให้หยุดหุ่นยนต์
