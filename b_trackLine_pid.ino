@@ -134,7 +134,7 @@ void calculate_pid(int power) {
   I = I + previous_I;
   D = error - previous_error;
   
-  PID_value = (22.0 * P) + (0.0 * I) + (25.0 * D);
+  PID_value = (25.0 * P) + (0.0 * I) + (28.0 * D);
   
   previous_I = I;
   previous_error = error;

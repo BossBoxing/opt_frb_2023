@@ -71,9 +71,9 @@ int Raise_Up = EEPROM.read(startServoSetAddress + 4) == 255 ? 38 : EEPROM.read(s
 int Raise_Down = EEPROM.read(startServoSetAddress + 5) == 255 ? 19 : EEPROM.read(startServoSetAddress + 5) ; //ค่าเอามือลง
 /////////////////////////////////
 // Time Config //
-int T1 = 25;
-int T2 = 120;
-int T3 = 160;
+int T1 = 10;
+int T2 = 110;
+int T3 = 140;
 int T_SM = 50;
 int T_CC = 50;
 /////////////////////////////////

@@ -51,9 +51,9 @@ void LL(int i, int j) { //left
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
         Fw(T1);
-        //        while (S_RR < Ref_RR) {
-        //          Pid_twoSensor(200);
-        //        }
+//        while (S_LL > Ref_LL || S_RR > Ref_RR) {
+//          TrackCan();
+//        }
         Stop(100);
         if (j == 1) {
           TL90();
@@ -146,10 +146,10 @@ void RR(int i, int j) { //right
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-        Fw(T1);
-        //        while (S_RR < Ref_RR) {
-        //          Pid_twoSensor(200);
-        //        }
+         Fw(T1);
+//        while (S_LL > Ref_LL || S_RR > Ref_RR) {
+//          TrackCan();
+//        }
         Stop(100);
         if (j == 1) {
           TR90();
