@@ -149,13 +149,15 @@ void can1() {
   InCan_checkCan(3, 1,false); // can_check[1] == 1 แปลว่า ไม่มีกระป๋อง เข้า can2
 
   if (can_check[1] == 0) {
-    if (readCan() == 1) {
+    
+    if (target == 1) {
       can1_R_checkCan();
-    } else if (readCan() == 2) {
+    } else if (target == 2) {
       can1_Y_checkCan();
     } else {
       can1_G_checkCan();
     }
+    
   }
 
 }
@@ -165,22 +167,24 @@ void can2() {
     InCan_checkCan(3, 2,false);
   }
   if (can_check[2] == 0) {
-    if (readCan() == 1) {
+    
+    if (target == 1) {
       can2_R_checkCan();
-    } else if (readCan() == 2) {
+    } else if (target == 2) {
       can2_Y_checkCan();
     } else {
       can2_G_checkCan();
     }
+    
   }
 }
 void can1_Right() {
   InCan_checkCan(3, 1,false); // can_check[1] == 1 แปลว่า ไม่มีกระป๋อง เข้า can2
 
   if (can_check[1] == 0) {
-    if (readCan() == 1) {
+    if (target == 1) {
       can1_R_checkCan_R();
-    } else if (readCan() == 2) {
+    } else if (target == 2) {
       can1_Y_checkCan_R();
     } else {
       can1_G_checkCan_R();
@@ -194,9 +198,9 @@ void can2_Right() {
     InCan_checkCan(3, 2,false);
   }
   if (can_check[2] == 0) {
-    if (readCan() == 1) {
+    if (target == 1) {
       can2_R_checkCan_R();
-    } else if (readCan() == 2) {
+    } else if (target == 2) {
       can2_Y_checkCan_R();
     } else {
       can2_G_checkCan_R();
@@ -213,7 +217,7 @@ void can3() {
   if (can_check[3] == 0) {
     B_LL(4, 1);
 
-    GoTarget(readCan());
+    GoTarget();
   }
 }
 void can4() { // โค้ดวิ่ง Can4
@@ -227,7 +231,7 @@ void can4() { // โค้ดวิ่ง Can4
   {
     B_RR(4, 1);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can5() { // โค้ดวิ่ง Can5
@@ -243,7 +247,7 @@ void can5() { // โค้ดวิ่ง Can5
     B_LL(3, 2);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can6() { // โค้ดวิ่ง Can6
@@ -260,7 +264,7 @@ void can6() { // โค้ดวิ่ง Can6
     B_RR(3, 2);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can7() {
@@ -277,7 +281,7 @@ void can7() {
     RR(2, 1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can8() {
@@ -294,7 +298,7 @@ void can8() {
     LL(2, 1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can9() {
@@ -302,18 +306,19 @@ void can9() {
   {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 4);
+    CC(1, 4, true);
   }
 
-  InCan_checkCan(1, 9,false);
+  InCan_checkCan(3, 9,false);
 
   if (can_check[9] == 0)
   {
-    CC(3, 6);
+    B_LL(4,1);
+    CC(3, 6, false); // No TR90();
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can10() {
@@ -321,25 +326,26 @@ void can10() {
   {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 5);
+    CC(1, 5, true);
   }
 
-  InCan_checkCan(2, 10,false);
+  InCan_checkCan(3, 10,false);
 
   if (can_check[10] == 0)
   {
-    CC(2, 6);
+    B_RR(4, 1);
+    CC(2, 6, false); // No TL90();
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can11() {
   if (can_check[10] == 0) {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 6);
+    CC(1, 6, true);
     LL(1, 2);
   }
 
@@ -348,11 +354,11 @@ void can11() {
   if (can_check[11] == 0)
   {
     B_LL(3, 2);
-    CC(1, 6);
+    CC(1, 6, true);
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can12() {
@@ -360,7 +366,7 @@ void can12() {
   {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 6);
+    CC(1, 6, true);
     RR(1, 2); // Wait();
   }
 
@@ -369,11 +375,11 @@ void can12() {
   if (can_check[12] == 0)
   {
     B_RR(3, 2);
-    CC(1, 6);
+    CC(1, 6, true);
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can13() {
@@ -381,7 +387,7 @@ void can13() {
   {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 6);
+    CC(1, 6, true);
     LL(1, 1);
   }
 
@@ -390,18 +396,18 @@ void can13() {
   if (can_check[13] == 0)
   {
     RR(2, 1);
-    CC(1, 6);
+    CC(1, 6, true);
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can14() {
   if (can_check[13] == 0) {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 6);
+    CC(1, 6, true);
     RR(1, 1);
   }
 
@@ -410,11 +416,11 @@ void can14() {
   if (can_check[14] == 0)
   {
     LL(2, 1);
-    CC(1, 6);
+    CC(1, 6, true);
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan()); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget(); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 void can15() {
@@ -422,22 +428,23 @@ void can15() {
   {
     FF(4);
     FF(1); // FF(1);
-    CC(1, 6);
-    FF(1); // FF(1);
+    CC(1, 6, true);
+    // FF(1); // FF(1);
   }
 
   InCan_checkCan(3, 15,false);
 
   if (can_check[15] == 0)
   {
-    TL90();
-    Stop(30);
-    FF(1); // FF(1);
-    CC(1, 6);
+    // TL90_SM();
+    // Stop(30);
+    B_FF(1); // FF(1);
+    B_RR(5, 1);
+    CC(1, 6, false);
     FF(1); // FF(1);
     FF(4);
 
-    GoTarget(readCan(), "Finish"); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
+    GoTarget("Finish"); // กำหนดสีอะไร จะวิ่งไปวางสีนั้นนๆ
   }
 }
 
@@ -480,12 +487,12 @@ void no_can7_to_can8() {
 void no_can8_to_can9() {
   TL90();
   TrackSlowTime(500);
-  CC(3, 4);
+  CC(3, 4, true);
 }
 void no_can9_to_can10() {
   TL90();
   TrackSlowTime(500);
-  CC(2, 3);
+  CC(2, 3, true);
 }
 void no_can10_to_can11() {
   TL90();
@@ -516,35 +523,33 @@ void no_can15_to_finish() {
   TL90();
   Pause(30);
   FF(1); // FF(1);
-  CC(1, 6);
+  CC(1, 6, true);
   FF(1); // FF(1);
   FF(4);
   Finish("R");
 }
 
-void GoTarget(int target) {
+void GoTarget() {
   if (target == 1) {
     rr(); // left box
   }
   else if (target == 2) {
     yy(); // center box
   }
-  else if (target == 3) {
+  else {
     gg(); // right box
   }
-  else {}
 }
-void GoTarget(int target, String finish) {
+void GoTarget(String finish) {
   if (target == 1) {
     rr_finish();
   }
   else if (target == 2) {
     yy_finish();
   }
-  else if (target == 3) {
+  else{
     gg_finish();
   }
-  else {}
 }
 
 void yy() { // วิ่งไปวางสีเหลือง

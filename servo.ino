@@ -50,24 +50,24 @@ void sUp() {
   servo(Raise, Raise_Up);  // delay(250);
 }
 void sDown() {
-  for (int i = Raise_Up; i > Raise_Down; i -= 2)
+  for (int i = Raise_Up; i > Raise_Down; i -= 5)
   {
     servo(Raise, i);
-    
-    if (S_LL > Ref_LL || S_RR > Ref_RR)
-    {
-     TrackCan(); 
-    }
-    else{
-      Pause(10);
-    }
+    TrackCan(); 
   }
 }
-void sDown_Yellow() {
+void sDown_Push_Yellow() {
   for (int i = Raise_Up; i > Raise_Down; i -= 1)
   {
     servo(Raise, i);
     delay(5);
+  }
+}
+void sDown_Push() {
+  for (int i = Raise_Up; i > Raise_Down; i -= 2)
+  {
+    servo(Raise, i);
+    TrackCan(); 
   }
 }
 void sUp_Back() {

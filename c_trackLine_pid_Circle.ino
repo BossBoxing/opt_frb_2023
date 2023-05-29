@@ -80,7 +80,7 @@ void calculate_pid_circle_L(int power) {
   I = I + previous_I;
   D = error - previous_error;
   
-  PID_value = (40.0 * P) + (0.0 * I) + (55.0 * D);
+  PID_value = (50.0 * P) + (0.0 * I) + (65.0 * D);
   
   previous_I = I;
   previous_error = error;
@@ -170,7 +170,7 @@ void calculate_pid_circle_R(int power) {
   I = I + previous_I;
   D = error - previous_error;
   
-  PID_value = (40.0 * P) + (0.0 * I) + (55.0 * D);
+  PID_value = (50.0 * P) + (0.0 * I) + (65.0 * D);
   
   previous_I = I;
   previous_error = error;
@@ -186,13 +186,13 @@ void Pid_Circle_R(int power) {
 void PidCircle_L_Time(int power, unsigned int Time) {
   currentTime = millis();
   while (millis() - currentTime < Time) {
-    Pid(power);
+    Pid_Circle_L(power);
   }
 }
 
 void PidCircle_R_Time(int power, unsigned int Time) {
   currentTime = millis();
   while (millis() - currentTime < Time) {
-    Pid(power);
+    Pid_Circle_R(power);
   }
 }

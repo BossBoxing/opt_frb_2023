@@ -43,7 +43,7 @@ void FwSlow(int t) { // คำสั่งเดินหน้าแบบช�
   delay(t);
 }
 void Bk(int t) { // คำสั่งถอยหลัง
-  motor(1, -90); motor(2, -90);
+  motor(1, -70); motor(2, -70);
   delay(t);
 }
 void BkSlow(int t) { // คำสั่งถอยหลังแบบช้า
@@ -79,7 +79,7 @@ void readSensor() {
 
 void ok() {
   XIO();
-  
+
   sUp();
   sSet();
   // servo(Clasp, Clasp_Set); delay(200);
@@ -277,13 +277,13 @@ void setSensor() {
   EEPROM.update(startReffAddress + 22, Max[5]); // RR
 
   oledClear();
-//  oled(0, 0,  "Sensor Ref|Sensor Ref");
-//  oled(0, 7,  "---------------------");
-//  oled(0, 13, "LLL   %d |RR      %d", EEPROM.read(startReffAddress + 1), EEPROM.read(startReffAddress + 5));
-//  oled(0, 23, "LL    %d |RRR     %d", EEPROM.read(startReffAddress + 2), EEPROM.read(startReffAddress + 6));
-//  oled(0, 33, "L     %d", EEPROM.read(startReffAddress + 3));
-//  oled(0, 43, "C      %d", EEPROM.read(startReffAddress + 13));
-//  oled(0, 53, "R      %d", EEPROM.read(startReffAddress + 4));
+  //  oled(0, 0,  "Sensor Ref|Sensor Ref");
+  //  oled(0, 7,  "---------------------");
+  //  oled(0, 13, "LLL   %d |RR      %d", EEPROM.read(startReffAddress + 1), EEPROM.read(startReffAddress + 5));
+  //  oled(0, 23, "LL    %d |RRR     %d", EEPROM.read(startReffAddress + 2), EEPROM.read(startReffAddress + 6));
+  //  oled(0, 33, "L     %d", EEPROM.read(startReffAddress + 3));
+  //  oled(0, 43, "C      %d", EEPROM.read(startReffAddress + 13));
+  //  oled(0, 53, "R      %d", EEPROM.read(startReffAddress + 4));
   while (1) {}
 }
 void setServo() {
@@ -375,6 +375,7 @@ void Wait() {
   beep();
 }
 void setSensorHand() {
+  sDown_Push_Yellow();
   setTextSize(2);
   delay(500);
   while (SW_OK() == 1) {
@@ -386,7 +387,7 @@ void setSensorHand() {
   Keep();
   oledClear();
   beep();
-  delay(500);
+  delay(1000);
   ////
   EEPROM.update(startColorAddress + 1, S_CG);
   EEPROM.update(startColorAddress + 4, S_CR);
@@ -400,6 +401,7 @@ void setSensorHand() {
     delay(20);
   }
   // while(SW_OK() == 0){}
+  sDown_Push_Yellow();
   Place();
   oledClear();
   beep();
@@ -416,7 +418,7 @@ void setSensorHand() {
   Keep();
   oledClear();
   beep();
-  delay(500);
+  delay(1000);
   ////
   EEPROM.update(startColorAddress + 3, S_CG);
   EEPROM.update(startColorAddress + 6, S_CR);
@@ -430,6 +432,7 @@ void setSensorHand() {
     delay(20);
   }
   // while(SW_OK() == 0){}
+  sDown_Push_Yellow();
   Place();
   oledClear();
   beep();
@@ -446,7 +449,7 @@ void setSensorHand() {
   Keep();
   oledClear();
   beep();
-  delay(500);
+  delay(1000);
   ////
   EEPROM.update(startColorAddress + 2, S_CG);
   EEPROM.update(startColorAddress + 5, S_CR);
@@ -460,6 +463,7 @@ void setSensorHand() {
     delay(20);
   }
   // while(SW_OK() == 0){}
+  sDown_Push_Yellow();
   Place();
   oledClear();
   beep();
@@ -514,21 +518,49 @@ void code_checkcan_R() { // คำสั่งวิ่งทั้งสนา�
   can14();
   can15();
 }
-int readCan() { // คำสั่งอ่านค่ากระป๋องด้วยเซนเซอร์มือ ออกมาเป็นตัวเลข 1 แดง 2 เหลือง 3 เขียว
 
+int mode(int a[],int n) {
+   int maxValue = 0, maxCount = 0, i, j;
+
+   for (i = 0; i < n; ++i) {
+      int count = 0;
+      
+      for (j = 0; j < n; ++j) {
+         if (a[j] == a[i])
+         ++count;
+      }
+      
+      if (count > maxCount) {
+         maxCount = count;
+         maxValue = a[i];
+      }
+   }
+
+   return maxValue;
+}
+
+void readCan() { // คำสั่งอ่านค่ากระป๋องด้วยเซนเซอร์มือ ออกมาเป็นตัวเลข 1 แดง 2 เหลือง 3 เขียว
   // Read Can
+  Pause(100);
+
+  int Sum_Can[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+
+  for (int i = 0; i < 10; i++) {
+    if ( ((S_CG > (Ref_CG_R - diff_can)) && (S_CG < (Ref_CG_R + diff_can)))
+         && ((S_CR > (Ref_CR_R - diff_can)) && (S_CR < (Ref_CR_R + diff_can))) ) {
+      Sum_Can[i] = RectanglePosition[1];
+    }
+    else if ( ((S_CG > (Ref_CG_G - diff_can)) && (S_CG < (Ref_CG_G + diff_can)))
+              && ((S_CR > (Ref_CR_G - diff_can)) && (S_CR < (Ref_CR_G + diff_can))) ) {
+      Sum_Can[i] = RectanglePosition[3];
+    }
+    else {
+      Sum_Can[i] = RectanglePosition[2]; // YELLOW CAN
+    }
+  }
   
-  if ( ((S_CG > (Ref_CG_R - diff_can)) && (S_CG < (Ref_CG_R + diff_can))) 
-      && ((S_CR > (Ref_CR_R - diff_can)) && (S_CR < (Ref_CR_R + diff_can))) ) {
-    return CanPosition[1]; // RED CAN
-  }
-  else if ( ((S_CG > (Ref_CG_G - diff_can)) && (S_CG < (Ref_CG_G + diff_can))) 
-      && ((S_CR > (Ref_CR_G - diff_can)) && (S_CR < (Ref_CR_G + diff_can))) ) {
-    return CanPosition[3]; // GREEN CAN
-  }
-  else {
-    return CanPosition[2]; // YELLOW CAN
-  }
+  target = mode(Sum_Can, 10);
 }
 
 
@@ -545,44 +577,44 @@ void setCanPos() {
     if (pos == 0)
     {
       oled(0, 0, "1: R \n2: Y   %d \n3: G", pos + 1);
-      CanPosition[1] = 1; // R
-      CanPosition[2] = 2; // Y
-      CanPosition[3] = 3; // G
+      RectanglePosition[1] = 1; // R
+      RectanglePosition[2] = 2; // Y
+      RectanglePosition[3] = 3; // G
     }
     else if (pos == 1)
     {
       oled(0, 0, "1: R \n2: G   %d \n3: Y", pos + 1);
-      CanPosition[1] = 1; // R
-      CanPosition[2] = 3; // Y
-      CanPosition[3] = 2; // G
+      RectanglePosition[1] = 1; // R
+      RectanglePosition[2] = 3; // Y
+      RectanglePosition[3] = 2; // G
     }
     else if (pos == 2)
     {
       oled(0, 0, "1: Y \n2: R   %d \n3: G", pos + 1);
-      CanPosition[1] = 2; // R
-      CanPosition[2] = 1; // Y
-      CanPosition[3] = 3; // G
+      RectanglePosition[1] = 2; // R
+      RectanglePosition[2] = 1; // Y
+      RectanglePosition[3] = 3; // G
     }
     else if (pos == 3)
     {
       oled(0, 0, "1: Y \n2: G   %d \n3: R", pos + 1);
-      CanPosition[1] = 3; // R
-      CanPosition[2] = 1; // Y
-      CanPosition[3] = 2; // G
+      RectanglePosition[1] = 3; // R
+      RectanglePosition[2] = 1; // Y
+      RectanglePosition[3] = 2; // G
     }
     else if (pos == 4)
     {
       oled(0, 0, "1: G \n2: R   %d \n3: Y", pos + 1);
-      CanPosition[1] = 2; // R
-      CanPosition[2] = 3; // Y
-      CanPosition[3] = 1; // G
+      RectanglePosition[1] = 2; // R
+      RectanglePosition[2] = 3; // Y
+      RectanglePosition[3] = 1; // G
     }
     else
     {
       oled(0, 0, "1: G \n2: Y   %d \n3: R", pos + 1);
-      CanPosition[1] = 3; // R
-      CanPosition[2] = 2; // Y
-      CanPosition[3] = 1; // G
+      RectanglePosition[1] = 3; // R
+      RectanglePosition[2] = 2; // Y
+      RectanglePosition[3] = 1; // G
     }
     //oledClear();
     //delay(10);
@@ -612,10 +644,10 @@ void showAllSensor() {
       oled(0, 0,  "Sensor Val|Sensor Val");
       oled(0, 7,  "---------------------");
 
-      oled(20, 17, "%d ", S_LL); 
+      oled(20, 17, "%d ", S_LL);
       oled(40, 17, "%d ", S_L);
-      oled(60, 17, "%d ", S_C); 
-      oled(80, 17, "%d ", S_R); 
+      oled(60, 17, "%d ", S_C);
+      oled(80, 17, "%d ", S_R);
       oled(100, 17, "%d ", S_RR);
 
       oled(0, 27, "%d ", S_LLL);
@@ -624,10 +656,10 @@ void showAllSensor() {
       int x = 30;
       oled(0, 7 + x,  "---------------------");
 
-      // oled(20, 27 + x, "%d ", S_B_RR); 
+      // oled(20, 27 + x, "%d ", S_B_RR);
       oled(40, 27 + x, "%d ", S_B_R);
       oled(60, 27 + x, "%d ", S_B_C);
-      oled(80, 27 + x, "%d ", S_B_L); 
+      oled(80, 27 + x, "%d ", S_B_L);
       // oled(90, 27 + x, "%d ", S_B_LL);
 
       oled(0, 17 + x, "%d ", S_B_RRR);
@@ -637,7 +669,8 @@ void showAllSensor() {
       oled(20, 17, "Distance: %d cm. ", S_Can);
       oled(20, 27, "Hand Red: %d ", S_CR);
       oled(20, 37, "Hand Green: %d ", S_CG);
-      oled(20, 47, "CAN: %d", readCan());
+      oled(20, 47, "CAN: %d", target);
+      readCan();
     }
   }
 }

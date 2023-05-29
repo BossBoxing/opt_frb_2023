@@ -42,6 +42,30 @@ void FF_Slow() {
     Pid(70);
   }
 }
+void B_FF(int i) {
+  currentTime = millis();
+  while (1) {
+    if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR)) {
+      if (i == 1) {
+        Bk(T1 + 10);
+      }
+      if (i == 2) {
+        Bk(T2 + 10);
+      }
+      else if (i == 3) {
+        Bk(T3 + 10);
+      }
+      else {
+        while (S_B_LLL < Ref_B_LLL || S_B_RRR < Ref_B_RRR) {
+          Track_B();
+        }
+        TrackSlow_B_Time(100);
+      }
+      break;
+    }
+    TrackSlow_B();
+  }
+}
 void LL(int i, int j) { //left
   if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR)) {
     TrackSlowTime(60);
@@ -50,13 +74,14 @@ void LL(int i, int j) { //left
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-        Fw(T1);
-//        while (S_LL > Ref_LL || S_RR > Ref_RR) {
-//          TrackCan();
-//        }
+        // Fw(T1);
+        while (S_B_LLL > Ref_B_LLL && S_B_RRR > Ref_B_RRR) {
+          TrackCan();
+        }
+        TrackCanTime(T1);
         Stop(100);
         if (j == 1) {
-          TL90();
+          TL90_SM();
         }
         else if (j == 2) {
           TL90();
@@ -68,7 +93,7 @@ void LL(int i, int j) { //left
           TL90();
         }
         //Stop(20);
-        TrackSlowTime(200);
+        TrackTime(200);
         break;
       }
       Track();
@@ -146,13 +171,14 @@ void RR(int i, int j) { //right
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-         Fw(T1);
-//        while (S_LL > Ref_LL || S_RR > Ref_RR) {
-//          TrackCan();
-//        }
+        // Fw(T1);
+        while (S_B_LLL > Ref_B_LLL && S_B_RRR > Ref_B_RRR) {
+          TrackCan();
+        }
+        TrackCanTime(T1);
         Stop(100);
         if (j == 1) {
-          TR90();
+          TR90_SM();
         }
         else if (j == 2) {
           TR90();
@@ -164,7 +190,7 @@ void RR(int i, int j) { //right
           TR90();
         }
         //Stop(20);
-        TrackSlowTime(200);
+        TrackTime(200);
         break;
       }
       Track();
@@ -314,6 +340,20 @@ void B_LL(int i, int j) { //left
       Track_B();
     }
   }
+  else if (i == 5) {
+    while (1) {
+      if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR)) {
+        // BkSlow(20);// TrackSlowTime(50);
+        B_Stop(150);
+        UL90();
+        PidCircle_R_Time(160, 300);
+        // TrackSlowTime(100);
+        // Stop(20);
+        break;
+      }
+      TrackSlow_B();
+    }
+  }
   else {
     while (1) {
       if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR)) {
@@ -405,6 +445,20 @@ void B_RR(int i, int j) { //right
         break;
       }
       Track_B();
+    }
+  }
+  else if (i == 5) {
+    while (1) {
+      if ((S_B_LLL < Ref_B_LLL) || (S_B_RRR < Ref_B_RRR)) {
+        // BkSlow(20);// TrackSlowTime(50);
+        B_Stop(150);
+        UR90();
+        PidCircle_R_Time(160, 300);
+        // TrackSlowTime(100);
+        // Stop(20);
+        break;
+      }
+      TrackSlow_B();
     }
   }
   else {
@@ -553,7 +607,7 @@ void SM_Pure(int i) { //square small
   }
 }
 
-void CC(int x, int y) { //circle
+void CC(int x, int y, boolean flagTurnStart) { //circle
   // TrackSlowTime(60);
   if (S_LLL < Ref_LLL) {
     while (S_LLL <= Ref_LLL) {
@@ -582,8 +636,9 @@ void CC(int x, int y) { //circle
       Pid_Circle_L(120);
     }
 
-    TL90_Pre();
-    PidCircle_L_Time(180, 100);
+    FwSlow(T_CC);
+    UL90();
+    PidCircle_L_Time(180, 200);
 
     while (S_LLL <= Ref_LLL)
     {
@@ -593,8 +648,8 @@ void CC(int x, int y) { //circle
     {
       Pid_Circle_L(150);
     }
-    // Stop(50);
-    FwSlow(T_CC);
+    // Stop(100);
+    // FwSlow(T_CC);
     TL90_Pre();
   }
   else if ((x == 1) && (y == 5)) { //1 > 5
@@ -613,8 +668,9 @@ void CC(int x, int y) { //circle
       Pid_Circle_R(120);
     }
 
-    TR90_Pre();
-    PidCircle_R_Time(180, 100);
+    FwSlow(T_CC);
+    UR90();
+    PidCircle_R_Time(180, 200);
 
     while (S_RRR <= Ref_RRR)
     {
@@ -624,12 +680,16 @@ void CC(int x, int y) { //circle
     {
       Pid_Circle_R(150);
     }
-    // Stop(50);
-    FwSlow(T_CC);
+    // Stop(100);
+    // FwSlow(T_CC);
     TR90_Pre();
   }
   else if ((x == 1) && (y == 6)) { //1 > 6
-    LL(4, 1);
+
+    if (flagTurnStart)
+    {
+     LL(4, 1); 
+    }
 
     while (S_LLL >= Ref_LLL)
     {
@@ -644,8 +704,9 @@ void CC(int x, int y) { //circle
       Pid_Circle_L(120);
     }
 
-    TL90_Pre();
-    PidCircle_L_Time(180, 100);
+    FwSlow(T_CC);
+    UL90();
+    PidCircle_L_Time(180, 200);
 
     while (S_LLL <= Ref_LLL)
     {
@@ -659,12 +720,12 @@ void CC(int x, int y) { //circle
     {
       Pid_Circle_L(180);
     }
-    while (S_LL >= Ref_LL || S_L >= Ref_L)
+    while (S_LLL >= Ref_LLL)
     {
       Pid_Circle_L(150);
     }
-    // Stop(50);
-    FwSlow(T_CC);
+    Stop(100);
+    // FwSlow(T_CC);
     TL90_Pre();
 
     while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
@@ -692,7 +753,7 @@ void CC(int x, int y) { //circle
     }
 
     Stop(30);
-    TL90();
+    UL90();
     Stop(30);
 
     while (S_LLL <= Ref_LLL || S_RRR <= Ref_RRR) {
@@ -708,7 +769,11 @@ void CC(int x, int y) { //circle
   }
   else if ((x == 2) && (y == 6)) { //2 > 6
     // go to placecan [10]
-    LL(4, 1);
+
+    if (flagTurnStart)
+    {
+      LL(4, 1);
+    }
 
     while (S_LLL <= Ref_LLL)
     {
@@ -719,8 +784,9 @@ void CC(int x, int y) { //circle
       Pid_Circle_L(120);
     }
 
-    TL90_Pre();
-    PidCircle_L_Time(180, 100);
+    FwSlow(T_CC);
+    UL90();
+    PidCircle_L_Time(160, 300);
 
     while (S_LLL <= Ref_LLL)
     {
@@ -730,16 +796,17 @@ void CC(int x, int y) { //circle
     {
       Pid_Circle_L(180);
     }
+    
     while (S_LLL <= Ref_LLL)
     {
       Pid_Circle_L(180);
     }
-    while (S_LL >= Ref_LL || S_L >= Ref_L)
+    while (S_LLL >= Ref_LLL)
     {
       Pid_Circle_L(150);
     }
-    // Stop(50);
-    FwSlow(T_CC);
+    Stop(100);
+    // FwSlow(T_CC);
     TL90_Pre();
 
     while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
@@ -749,46 +816,16 @@ void CC(int x, int y) { //circle
   ////////////////3///////////////
   else if ((x == 3) && (y == 4)) { //3 > 4
     // no_can8_to_can9 usefully
-    RR(4, 1);
-    while (S_R >= Ref_R || S_RR >= Ref_RR) {
-      TrackCircle_R();
-    }
 
-    while (S_RR <= Ref_RR) {
-      Fw(10);
-    }
-    TrackCircle_R_Time(200);
-    // while(S_R >= Ref_R || S_RR >= Ref_RR){TrackCircle_R();}
-
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_R();
-    }
-    while (S_LLL <= Ref_LLL) {
-      Fw(10);
-    }
-
-    // TrackCircle_L_Time(180, 200);
-    while (S_L >= Ref_L || S_LL >= Ref_LL) {
-      TrackCircle_L();
-    }
-    while (S_LLL >= Ref_LLL) {
-      TrackCircle_L();
-    }
-
-    Stop(30);
-    TL90();
-    Stop(30);
-
-    while (S_LLL <= Ref_LLL || S_RRR <= Ref_RRR) {
-      TrackSlow();
-    }
-    TrackSlowTime(200);
   }
   else if ((x == 3) && (y == 5)) { //3 > 5
     // No Use
   }
   else { //3 > 6
-    RR(4, 1);
+    if (flagTurnStart)
+    {
+      RR(4, 1);
+    }
 
     while (S_RRR <= Ref_RRR)
     {
@@ -799,8 +836,9 @@ void CC(int x, int y) { //circle
       Pid_Circle_R(120);
     }
 
-    TR90_Pre();
-    PidCircle_R_Time(180, 100);
+    FwSlow(T_CC);
+    UR90();
+    PidCircle_R_Time(160, 300);
 
     while (S_RRR <= Ref_RRR)
     {
@@ -810,16 +848,17 @@ void CC(int x, int y) { //circle
     {
       Pid_Circle_R(180);
     }
+    
     while (S_RRR <= Ref_RRR)
     {
       Pid_Circle_R(180);
     }
-    while (S_RR >= Ref_RR || S_R >= Ref_R)
+    while (S_RRR >= Ref_RRR)
     {
       Pid_Circle_R(150);
     }
-    // Stop(50);
-    FwSlow(T_CC);
+    Stop(100);
+    // FwSlow(T_CC);
     TR90_Pre();
 
     while (S_LL >= Ref_LL || S_RR >= Ref_RR) {
@@ -844,22 +883,31 @@ void InCan(int i) {
       if (i == 1) {
         Stop(20);
         Keep();
+
+        readCan();
+
         Stop(20);
-        TL90_Pre();
-        TrackSlowTime(100);
+        UL90();
+        TrackTime(100);
         // Stop(20);
       }
       else if (i == 2) {
         Stop(20);
         Keep();
+
+        readCan();
+
         Stop(20);
-        TR90_Pre();
-        TrackSlowTime(100);
+        UR90();
+        TrackTime(100);
         // Stop(20);
       }
       else {
         Stop(20);
         Keep();
+
+        readCan();
+
         Stop(20);
       }
       break;
@@ -869,35 +917,14 @@ void InCan(int i) {
 }
 void InCan_checkCan(int i, int can, boolean tracked) { // checkCan
   int time = 0;
-  boolean flagCan = true;
+  // boolean flagCan = true;
 
   sDown();
 
-  //  while (S_Can >= SS_Can + 4)
-  //  {
-  //    TrackSlow(); delay(1);
-  //
-  //    if (S_LL > Ref_LL && S_L > Ref_L && S_R > Ref_R && S_RR > Ref_RR)
-  //    {
-  //      // time++;
-  //    }
-  //    else
-  //    {
-  //      time = 0;
-  //    }
-  //
-  //    if (time > 35) // 15
-  //    { // no can
-  //      noCan(can);
-  //      can_check[can] = 1;
-  //      flagCan = false;
-  //      break;
-  //    }
-  //  }
-  while (flagCan == true)
+  while (true)
   {
-    int POWER = constrain(map(S_Can, 0, 16, 10, 180), 0, 180);
-    Pid(POWER);
+    int POWER = int(constrain(map(constrain(S_Can,5,30), 5, 30, 30, 150), 90, 120));
+    Pid_Sonar(POWER);
 
     if (S_Can <= SS_Can)
     {
@@ -911,9 +938,15 @@ void InCan_checkCan(int i, int can, boolean tracked) { // checkCan
         else {
           Keep();
         }
+
         Stop(20);
-        TL90_Pre();
-        TrackSlowTime(100);
+
+        readCan();
+
+        Stop(20);
+        UL90();
+        // Wait();
+        TrackTime(100);
       }
       else if (i == 2)
       {
@@ -924,9 +957,15 @@ void InCan_checkCan(int i, int can, boolean tracked) { // checkCan
         else {
           Keep();
         }
+
         Stop(20);
-        TR90_Pre();
-        TrackSlowTime(100);
+
+        readCan();
+
+        Stop(20);
+        UR90();
+        // Wait();
+        TrackTime(100);
       }
       else
       {
@@ -937,6 +976,11 @@ void InCan_checkCan(int i, int can, boolean tracked) { // checkCan
         else {
           Keep();
         }
+
+        Stop(20);
+
+        readCan();
+
         Stop(20);
       }
       break;
@@ -1005,11 +1049,12 @@ void PlaceYellow(boolean isFinish) {
   }
   Pause(30);
 
-  if (isFinish == false)
+  if (!isFinish)
   {
-    TL90();
+    TL90_SM();
     Pause(10);
   }
+
   sUp();
   sSet();
 
@@ -1149,10 +1194,10 @@ void PlaceCan(String s) {
   Pause(10);
 
   if (s == "Y" || s == "Y_Finish") {
-    sDown_Yellow();
+    sDown_Push_Yellow();
   }
   else {
-    sDown();
+    sDown_Push();
   }
 
   while (1) {
@@ -1183,6 +1228,7 @@ void PlaceCan(String s) {
     }
     else if ((S_LL < Ref_LL) && (S_RR < Ref_RR) && (s == "Y")) {
       PlaceYellow(false);
+
       break;
     }
     else if ((S_LL < Ref_LL) && (S_RR < Ref_RR) && (s == "Y_Finish")) {

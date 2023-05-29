@@ -23,8 +23,8 @@ int function = 0;
 #define S_B_R map(analog(10),0,1023,0,100) //พอร์ตเซ็นเซอร์ด้านในขวา
 #define S_B_RRR map(analog(11),0,1023,0,100) //พอร์ตเซ็นเซอร์นับแยกขวา
 
-#define S_CG map(analog(12),0,1023,0,69) //พอร์ตเซ็นเซอร์สีเขียว
-#define S_CR map(analog(13),0,1023,0,69) //พอร์ตเซ็นเซอร์สีแดง
+#define S_CR map(analog(12),0,1023,0,69) //พอร์ตเซ็นเซอร์สีแดง
+#define S_CG map(analog(13),0,1023,0,69) //พอร์ตเซ็นเซอร์สีเขียว
 #define S_Can ultrasonic(49,50) //พอร์ตเซ็นเซอร์เซ็คกระป๋อง
 
 #define Clasp 2 //พอร์ต servo หนีบ
@@ -36,8 +36,7 @@ int Ref_CG_Y = EEPROM.read(startColorAddress + 3); // ค่าเซนเซ�
 int Ref_CR_R = EEPROM.read(startColorAddress + 4); // ค่าเซนเซอร์มือสีแดงจับกระป๋องแดง
 int Ref_CR_G = EEPROM.read(startColorAddress + 5); // ค่าเซนเซอร์มือสีแดงจับกระป๋องเขียว
 int Ref_CR_Y = EEPROM.read(startColorAddress + 6); // ค่าเซนเซอร์มือสีแดงจับกระป๋องเหลือง
-#define diff_can 5
-
+#define diff_can 10
 
 int Ref_LLL = EEPROM.read(startReffAddress + 1); //ค่าแสงตเซ็นเซอร์นับแยกซ้าย
 int Ref_LL = EEPROM.read(startReffAddress + 2); //ค่าแสงตเซ็นเซอร์ทางซ้ายสุด
@@ -71,11 +70,11 @@ int Raise_Up = EEPROM.read(startServoSetAddress + 4) == 255 ? 38 : EEPROM.read(s
 int Raise_Down = EEPROM.read(startServoSetAddress + 5) == 255 ? 19 : EEPROM.read(startServoSetAddress + 5) ; //ค่าเอามือลง
 /////////////////////////////////
 // Time Config //
-int T1 = 10;
-int T2 = 110;
-int T3 = 140;
-int T_SM = 50;
-int T_CC = 50;
+int T1 = 40;
+int T2 = 100;
+int T3 = 130;
+int T_SM = 40;
+int T_CC = 40;
 /////////////////////////////////
 int can_check[16] = {
   0 // 0
@@ -95,14 +94,14 @@ int can_check[16] = {
   , 0 // 14
   , 0 // 15
 };
-int CanPosition[4] = {
-  0,
-  1, // RED
-  2, // YELLOW
-  3 // GREEN
+int RectanglePosition[4] = { // ตัวกำหนดช่องเข้าไปวาง
+  0, // no use
+  1, //** Left Rectangle // 1 = Red
+  2, //** Center Rectangle // 2 = Yellow
+  3 //** Right Rectangle // 3 = Green
 };
 
-
+int target=1;
 boolean keepingCan = false;
 /////////////////////
 
@@ -113,9 +112,17 @@ void setup() {
 void loop() {
   if (function == 0) {
     // setCanPos();
-    
-    code_checkcan(); // โค้ดวิ่ง
-    
+     
+      code_checkcan(); // โค้ดวิ่ง
+//    FF(1); // FF(1);
+//      CC(1, 6, true);
+//    
+//    InCan_checkCan(3, 15, true);
+//  
+//    B_FF(1); // FF(1);
+//    B_RR(5, 1);
+//    CC(1, 6, false);
+
     Pause(1000000); // วิ่งเสร็จ ให้หยุดหุ่นยนต์
     Wait(); // รอกดสวิตส์
   }
@@ -170,14 +177,17 @@ void loop() {
       oled(1, 10, "G : %d ", S_CG);
       oled(1, 20, "R : %d ", S_CR);
       oled(1, 30, "DistSensor : %d ", S_Can);
-      oled(2, 40, "CAN: %d", readCan());
+      oled(2, 40, "CAN: %d", target);
+      readCan();
     }
   }
   else if (function == 7) {
-    Pid_B(150);
+    int POWER = int(constrain(map(constrain(S_Can,0,30), 0, 26, 10, 180), 120, 180));
+    oled(0,0,"%d  ",POWER);
   }
   else if (function == 8) {
-    Pid(150); 
+    CC(1, 4, true);
+    Wait(); 
   }
   else if (function == 9) {
 
