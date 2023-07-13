@@ -47,7 +47,7 @@ void sSet() {
   servo(Clasp, Clasp_Set);  // delay(350);
 }
 void sUp() {
-  servo(Raise, Raise_Up);  // delay(250);
+  servo(Raise, Raise_Up);  // delay(2000);
 }
 void sDown() {
   for (int i = Raise_Up; i > Raise_Down; i -= 2)

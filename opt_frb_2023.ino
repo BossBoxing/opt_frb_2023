@@ -38,7 +38,6 @@ int Ref_CR_G = EEPROM.read(startColorAddress + 5); // ค่าเซนเซ�
 int Ref_CR_Y = EEPROM.read(startColorAddress + 6); // ค่าเซนเซอร์มือสีแดงจับกระป๋องเหลือง
 #define diff_can 5
 
-
 int Ref_LLL = EEPROM.read(startReffAddress + 1); //ค่าแสงตเซ็นเซอร์นับแยกซ้าย
 int Ref_LL = EEPROM.read(startReffAddress + 2); //ค่าแสงตเซ็นเซอร์ทางซ้ายสุด
 int Ref_L = EEPROM.read(startReffAddress + 3); //ค่าแสงตเซ็นเซอร์ด้านในซ้าย
@@ -56,7 +55,7 @@ int Ref_B_RRR = EEPROM.read(startReffAddress + 12); //ค่าแสงตเ�
 int Max_LL = EEPROM.read(startReffAddress + 21);
 int Max_RR = EEPROM.read(startReffAddress + 22);
 
-int SS_Can = 3; // 5 //ระยะเข้าหนีบกระป๋อง cm
+int SS_Can = 5; // 5 //ระยะเข้าหนีบกระป๋อง cm
 
 int diff_S_L = EEPROM.read(startDiffAddress + 1) == 255 ? 0 : EEPROM.read(startDiffAddress + 1);
 int diff_S_R = EEPROM.read(startDiffAddress + 2) == 255 ? 0 : EEPROM.read(startDiffAddress + 2);
@@ -164,7 +163,16 @@ void loop() {
 
   }
   else if (function == 6) {
+    sDown_Yellow();
+    while(SW_OK() == 0){}
+    while(SW_OK() == 1){
+      setTextSize(2);
+      oled(0,0,"Press");
+      oled(0,20,"        SW_OK");
+    }
+    oledClear();
     Keep();
+    setTextSize(1);
     while (1) {
       // oledClear();
       oled(1, 10, "G : %d ", S_CG);
@@ -174,7 +182,8 @@ void loop() {
     }
   }
   else if (function == 7) {
-    Pid_B(150);
+    B_LL(4,1);
+    Wait();
   }
   else if (function == 8) {
     Pid(150); 

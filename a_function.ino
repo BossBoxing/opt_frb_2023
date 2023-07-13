@@ -3,12 +3,6 @@ float previous_error = 0, previous_I = 0;
 long currentTime = 0;
 int g_count, y_count, r_count = 0;
 
-int Slow_L = 85; // power ในการเลี้ยว
-int Slow_R = 85;
-
-int Slow_L_Finish = 60; // power ในการถอยหลังเข้า Finish
-int Slow_R_Finish = 60;
-
 void Stop(int t) { // คำสั่งหยุด
   int time = t / 2;
   motor(1, -100);
@@ -85,6 +79,7 @@ void ok() {
   // servo(Clasp, Clasp_Set); delay(200);
   // servo(Raise, Raise_Up); delay(200);
 
+  int flag = knob(0, 11);
   while (SW_OK() == 1) {
     function = knob(0, 11);
     if (function == 0) {
@@ -125,10 +120,18 @@ void ok() {
       beep();
       break;
     }
+
+    if (flag != function) {
+      sound(1250, 30);
+      // beep();
+      flag = function;
+    }
   }
   oledClear();
 }
 void setSensor() {
+  setTextSize(2);
+  oled(0,0,"Starting..");
   delay(500);
   int Max[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   int Min[9] = {100, 100, 100, 100, 100, 100, 100, 100, 100};
@@ -284,73 +287,128 @@ void setSensor() {
 //  oled(0, 33, "L     %d", EEPROM.read(startReffAddress + 3));
 //  oled(0, 43, "C      %d", EEPROM.read(startReffAddress + 13));
 //  oled(0, 53, "R      %d", EEPROM.read(startReffAddress + 4));
+  setTextSize(2);
+  oled(0,0,"Success..");
   while (1) {}
 }
-void setServo() {
-
+void setServo()
+{
+  sDown_Yellow();
   int count = 1;
   int TimeOK = 0;
+  while(SW_OK() == 0){}
 
-  while (true) {
+  while (true)
+  {
     TimeOK = 0;
-    if (count == 1) {
+    if (count == 1)
+    {
       servo(Clasp, knob(180));
-      oled(0, 0, "1. Clasp_Keep: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 0, "1. Clasp_Keep");
+      setTextSize(2);
+      oled(0, 15, "Val: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 35, "Hold SW_OK -> Save");
+      oled(0, 45, "Press SW_OK -> Change Value");
     }
-    else if (count == 2) {
+    else if (count == 2)
+    {
       servo(Clasp, knob(180));
-      oled(0, 0, "2. Clasp_Place: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 0, "2. Clasp_Place");
+      setTextSize(2);
+      oled(0, 15, "Val: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 35, "Hold SW_OK -> Save");
+      oled(0, 45, "Press SW_OK -> Change Value");
     }
-    else if (count == 3) {
+    else if (count == 3)
+    {
       servo(Clasp, knob(180));
-      oled(0, 0, "3. Clasp_Set: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 0, "3. Clasp_Set");
+      setTextSize(2);
+      oled(0, 15, "Val: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 35, "Hold SW_OK -> Save");
+      oled(0, 45, "Press SW_OK -> Change Value");
     }
-    else if (count == 4) {
+    else if (count == 4)
+    {
       servo(Raise, knob(180));
-      oled(0, 0, "4. Raise_Up: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 0, "4. Raise_Up");
+      setTextSize(2);
+      oled(0, 15, "Val: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 35, "Hold SW_OK -> Save");
+      oled(0, 45, "Press SW_OK -> Change Value");
     }
-    else if (count == 5) {
+    else if (count == 5)
+    {
       servo(Raise, knob(180));
-      oled(0, 0, "5. Raise_Down: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 0, "5. Raise_Down");
+      setTextSize(2);
+      oled(0, 15, "Val: %d ", knob(180));
+      setTextSize(1);
+      oled(0, 35, "Hold SW_OK -> Save");
+      oled(0, 45, "Press SW_OK -> Change Value");
     }
-    if (SW_OK() == false) {
+    if (SW_OK() == false)
+    {
 
-      while (1) {
+      while (1)
+      {
 
-        if (SW_OK() == false) {
+        if (SW_OK() == false)
+        {
           TimeOK++;
         }
-        else {
+        else
+        {
           beep();
-          if (count < 5) {
+          if (count < 5)
+          {
             count++;
             break;
-          } else {
+          }
+          else
+          {
             count = 1;
             break;
           }
         }
 
-        if (TimeOK > 500) {
+        if (TimeOK > 500)
+        {
           beep();
-          if (count == 1) {
-            EEPROM.update(startServoSetAddress + 1 , knob(180) );
+          if (count == 1)
+          {
+            EEPROM.update(startServoSetAddress + 1, knob(180));
           }
-          else if (count == 2) {
-            EEPROM.update(startServoSetAddress + 2 , knob(180) );
+          else if (count == 2)
+          {
+            EEPROM.update(startServoSetAddress + 2, knob(180));
           }
-          else if (count == 3) {
-            EEPROM.update(startServoSetAddress + 3 , knob(180) );
+          else if (count == 3)
+          {
+            EEPROM.update(startServoSetAddress + 3, knob(180));
           }
-          else if (count == 4) {
-            EEPROM.update(startServoSetAddress + 4 , knob(180) );
+          else if (count == 4)
+          {
+            EEPROM.update(startServoSetAddress + 4, knob(180));
           }
-          else if (count == 5) {
-            EEPROM.update(startServoSetAddress + 5 , knob(180) );
+          else if (count == 5)
+          {
+            EEPROM.update(startServoSetAddress + 5, knob(180));
           }
           oledClear();
           oled(5, 10, "Save! ");
-          while (SW_OK() == false) {}
+          while (SW_OK() == false)
+          {
+          }
           delay(500);
           beep();
           break;
@@ -358,12 +416,8 @@ void setServo() {
         delay(1);
         // Time++;
       }
-
     }
-
-    oledClear(); delay(50);
   }
-
 }
 void Wait() {
   while (SW_OK() == true) {
@@ -375,6 +429,7 @@ void Wait() {
   beep();
 }
 void setSensorHand() {
+  sDown_Yellow();
   setTextSize(2);
   delay(500);
   while (SW_OK() == 1) {
@@ -399,6 +454,7 @@ void setSensorHand() {
     oled(5, 40, "-NEXT-");
     delay(20);
   }
+  sDown_Yellow();
   // while(SW_OK() == 0){}
   Place();
   oledClear();
@@ -429,6 +485,7 @@ void setSensorHand() {
     oled(5, 40, "-NEXT-");
     delay(20);
   }
+  sDown_Yellow();
   // while(SW_OK() == 0){}
   Place();
   oledClear();
@@ -459,6 +516,7 @@ void setSensorHand() {
     oled(5, 40, "-NEXT-");
     delay(20);
   }
+  sDown_Yellow();
   // while(SW_OK() == 0){}
   Place();
   oledClear();

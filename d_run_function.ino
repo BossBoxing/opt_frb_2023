@@ -1201,7 +1201,7 @@ void Start() { // คำสั่ง ออกจากจุดสตาร์�
 void Finish(String Color) {
   if (Color == "Y")
   {
-    motor(1, -Slow_L_Finish);  motor(2, -Slow_R_Finish); delay(160);
+    motor(1, -spd_Finish);  motor(2, -spd_Finish); delay(160);
     Pause(20);
   }
   else
@@ -1212,7 +1212,7 @@ void Finish(String Color) {
     while (1) {
       if ((S_LLL < Ref_LLL) || (S_RRR < Ref_RRR))
       {
-        motor(1, Slow_L_Finish);  motor(2, Slow_R_Finish); delay(120);
+        motor(1, spd_Finish);  motor(2, spd_Finish); delay(120);
         Stop(20);
         break;
       }

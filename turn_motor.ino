@@ -1,8 +1,7 @@
 
 void TR90() { // คำสั่งเลี้ยวขวา 90 องศา
   Pause(30);
-  //motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(110);
-  motor(1, Slow_L); motor(2, -(Slow_R)); delay(10);
+  motor(1, Slow_L); motor(2, -(Slow_R)); delay(time_pre_turn_normal);
   while (S_C <= Ref_C) {
     motor(1, Slow_L);
     motor(2, -(Slow_R));
@@ -22,8 +21,7 @@ void TR90() { // คำสั่งเลี้ยวขวา 90 องศา
 }
 void TL90() { // คำสั่งเลี้ยวซ้าย 90 องศา
   Pause(30);
-  // motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(110);
-  motor(1, -(Slow_L)); motor(2, Slow_R); delay(10);
+  motor(1, -(Slow_L)); motor(2, Slow_R); delay(time_pre_turn_normal);
   while (S_C <= Ref_C) {
     motor(1, -(Slow_L));
     motor(2, Slow_R);
@@ -43,8 +41,7 @@ void TL90() { // คำสั่งเลี้ยวซ้าย 90 องศ�
 }
 void TR90_Pre() { // คำสั่งเลี้ยวขวา 90 องศา โดยให้เลี้ยวออกไปก่อนจะจัเซนเซอร
   Pause(30);
-  //motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(110);
-  motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(60);
+  motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(time_pre_turn_wide);
   while (S_R <= Ref_R) {
     motor(1, Slow_L);
     motor(2, -(Slow_R + 8));
@@ -64,8 +61,7 @@ void TR90_Pre() { // คำสั่งเลี้ยวขวา 90 องศ�
 }
 void TL90_Pre() { // คำสั่งเลี้ยวซ้าย 90 องศา โดยให้เลี้ยวออกไปก่อนจะจัเซนเซอร์
   Pause(30);
-  // motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(110);
-  motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(60);
+  motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(time_pre_turn_wide);
   while (S_L <= Ref_L) {
     motor(1, -(Slow_L + 8));
     motor(2, Slow_R);
@@ -86,8 +82,7 @@ void TL90_Pre() { // คำสั่งเลี้ยวซ้าย 90 อง�
 
 void TR90_SM() { // คำสั่งเลี้ยวขวา 90 องศา
   Pause(30);
-  //motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(110);
-  motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(20);
+  motor(1, Slow_L); motor(2, -(Slow_R + 8)); delay(time_pre_turn_smallsqure);
   while (S_R <= Ref_R) {
     motor(1, Slow_L);
     motor(2, -(Slow_R + 8));
@@ -107,8 +102,7 @@ void TR90_SM() { // คำสั่งเลี้ยวขวา 90 องศ�
 }
 void TL90_SM() { // คำสั่งเลี้ยวซ้าย 90 องศา
   Pause(30);
-  // motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(110);
-  motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(20);
+  motor(1, -(Slow_L + 8)); motor(2, Slow_R); delay(time_pre_turn_smallsqure);
   while (S_L <= Ref_L) {
     motor(1, -(Slow_L + 8));
     motor(2, Slow_R);
